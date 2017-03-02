@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.Statistic;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -16,6 +17,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.MainHand;
+import org.bukkit.inventory.Merchant;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -707,14 +709,17 @@ public class WebsendPlayerCommandSender implements Player {
         return baseObject.getCanPickupItems();
     }
 
-    @Override
+    //@Override
     public void setCustomName(java.lang.String param0) {
-        baseObject.setCustomName(param0);
+        baseObject.setDisplayName(param0);
+        //baseObject.setCustomName(param0);
+        
     }
 
-    @Override
+    //@Override
     public java.lang.String getCustomName() {
-        return baseObject.getCustomName();
+        //return baseObject.getCustomName();
+        return baseObject.getDisplayName();
     }
 
     @Override
@@ -1377,5 +1382,69 @@ public class WebsendPlayerCommandSender implements Player {
 
     public PotionEffect getPotionEffect(PotionEffectType pet) {
         return baseObject.getPotionEffect(pet);
+    }
+
+    public void playSound(Location arg0, Sound arg1, SoundCategory arg2, float arg3, float arg4) {
+        baseObject.playSound(arg0, arg1, arg4, arg4);
+    }
+
+    public void playSound(Location arg0, String arg1, SoundCategory arg2, float arg3, float arg4) {
+        baseObject.playSound(arg0, arg1, arg4, arg4);
+    }
+
+    public void stopSound(Sound arg0, SoundCategory arg1) {
+        baseObject.stopSound(arg0, arg1);
+    }
+
+    public void stopSound(String arg0, SoundCategory arg1) {
+        baseObject.stopSound(arg0, arg1);
+    }
+
+    public void sendTitle(String arg0, String arg1, int arg2, int arg3, int arg4) {
+        baseObject.sendTitle(arg0, arg1, arg2, arg3, arg4);
+    }
+
+    public InventoryView openMerchant(Merchant arg0, boolean arg1) {
+        return baseObject.openMerchant(arg0, arg1);
+    }
+
+    public boolean isHandRaised() {
+        return baseObject.isHandRaised();
+    }
+
+    public List<Entity> getPassengers() {
+        return baseObject.getPassengers();
+    }
+
+    public boolean addPassenger(Entity arg0) {
+        return baseObject.addPassenger(arg0);
+    }
+
+    public boolean removePassenger(Entity arg0) {
+        return baseObject.removePassenger(arg0);
+    }
+
+    public int getPortalCooldown() {
+        return baseObject.getPortalCooldown();
+    }
+
+    public void setPortalCooldown(int cooldown) {
+        baseObject.setPortalCooldown(cooldown);
+    }
+
+    public Set<String> getScoreboardTags() {
+        return baseObject.getScoreboardTags();
+    }
+
+    public boolean addScoreboardTag(String tag) {
+        return baseObject.addScoreboardTag(tag);
+    }
+
+    public boolean removeScoreboardTag(String tag) {
+        return baseObject.removeScoreboardTag(tag);
+    }
+
+    public void setResourcePack(String string, byte[] bytes) {
+        baseObject.setResourcePack(string, bytes);
     }
 }
