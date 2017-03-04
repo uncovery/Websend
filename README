@@ -1,3 +1,13 @@
+UPDATED TO SPIGOT 1.10.2
+
+> added dependency on powernbt to allow for access to nbt data on items 
+
+instead of continually having a moving benchmark to handle on the plugin end, can now jsut parse the JSON in php.
+
+
+
+ORIGINAL PROJECT README:
+
 Update february 2017:
 After almost 6 years, this plugin has reached an end-of-life status. 
 I will no longer be maintaining this plugin. 
