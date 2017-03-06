@@ -1447,4 +1447,8 @@ public class WebsendPlayerCommandSender implements Player {
     public void setResourcePack(String string, byte[] bytes) {
         baseObject.setResourcePack(string, bytes);
     }
+
+    public Spigot spigot() {
+        return baseObject.spigot();
+    }
 }
