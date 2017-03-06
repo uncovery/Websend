@@ -4,6 +4,7 @@ import com.github.websend.spigot.SpigotJSONSerializer;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.logging.Level;
+import me.dpohvar.powernbt.nbt.NBTBase;
 import org.bukkit.Bukkit;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
@@ -17,6 +18,8 @@ import org.bukkit.potion.PotionEffect;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import me.dpohvar.powernbt.nbt.NBTContainerItem;
 
 /**
  * Bukkit is not updated to 1.8 and the server mods based of bukkit are implementing their own patches to support 1.8
@@ -85,7 +88,17 @@ public abstract class JSONSerializer {
                 if (itemStack != null) {
                     JSONObject item = serializeItemStack(itemStack);
                     item.put("Slot", i);
+                    
+                    // retrieve nbt data
+                    if (itemStack.hasItemMeta()){
+                        NBTContainerItem itemS = new NBTContainerItem(itemStack);
+                        NBTBase itemTag = itemS.getTag();
+                        String nbtString = itemTag.toString();
+                        item.put("NBT", i);
+                    }
+                    
                     inventory.put(item);
+                    
                 }
             }
         }
