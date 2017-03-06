@@ -4,7 +4,7 @@
 
     <groupId>com.github.websend</groupId>
     <artifactId>Websend</artifactId>
-    <version>2.5.8-SNAPSHOT</version>
+    <version>2.6.5</version>
     <packaging>jar</packaging>
 
     <name>Websend</name>
@@ -44,11 +44,6 @@
             <artifactId>json</artifactId>
             <version>20160212</version>
         </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.10.2-R0.1-SNAPSHOT</version>
-        </dependency>
         
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -65,6 +60,16 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpmime</artifactId>
             <version>4.5.2</version>
+        </dependency>
+        <dependency>
+            <groupId>me.dpohvar.powernbt</groupId>
+            <artifactId>PowerNBT</artifactId>
+            <version>0.8.6.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.11.2-R0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
     
