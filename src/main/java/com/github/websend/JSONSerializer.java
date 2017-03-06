@@ -94,7 +94,7 @@ public abstract class JSONSerializer {
                         NBTContainerItem itemS = new NBTContainerItem(itemStack);
                         NBTBase itemTag = itemS.getTag();
                         String nbtString = itemTag.toString();
-                        item.put("NBT", nbtString);
+                        item.put("nbt", nbtString);
                     }
                     
                     inventory.put(item);
