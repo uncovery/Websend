@@ -1,10 +1,10 @@
 package com.github.websend;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
-import org.bukkit.Achievement;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -22,8 +22,18 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
+import org.bukkit.advancement.Advancement;
+import org.bukkit.advancement.AdvancementProgress;
+import org.bukkit.Achievement;
+import org.bukkit.FluidCollisionMode;
+import org.bukkit.NamespacedKey;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.PistonMoveReaction;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.util.BoundingBox;
+import org.bukkit.util.RayTraceResult;
 
-public class WebsendPlayerCommandSender implements Player  {
+public class WebsendPlayerCommandSender implements Player {
     
     /* This class allows tapping into command output from plugins
      * if the output is sent through the commandsender.
@@ -34,7 +44,78 @@ public class WebsendPlayerCommandSender implements Player  {
 
     private final Player baseObject;
     private final Plugin commandTargetPlugin;
+     
     
+    @Override
+    public int undiscoverRecipes(java.util.Collection<NamespacedKey> recipes) {
+        return this.baseObject.undiscoverRecipes(recipes);
+    }
+    
+    @Override
+    public void updateCommands() {
+        this.baseObject.updateCommands();
+    }
+    
+    @Override
+    public String getLocale() {
+        return this.baseObject.getLocale();
+    }
+    
+    @Override
+    public void sendBlockChange(Location location, BlockData blockdata) {
+        baseObject.sendBlockChange(location, blockdata);
+    }        
+    
+    @Override
+    public AdvancementProgress getAdvancementProgress(Advancement advancement) {
+        return this.baseObject.getAdvancementProgress(advancement);
+    }
+    
+    @Override
+    public void setPlayerListHeaderFooter(String header, String footer) {
+        baseObject.setPlayerListHeaderFooter(header, footer);
+    }
+    
+    @Override
+    public void setPlayerListFooter(String footer) {
+        baseObject.setPlayerListFooter(footer);
+    }    
+    
+    @Override
+    public String getPlayerListFooter() {
+       return baseObject.getPlayerListFooter();
+    }      
+    
+    @Override
+    public String getPlayerListHeader() {
+       return baseObject.getPlayerListHeader();
+    }   
+    
+    @Override 
+    public void setShoulderEntityRight(Entity entity) {
+        this.baseObject.setShoulderEntityRight(entity);
+    }
+    
+    @Override 
+    public Entity getShoulderEntityRight() {
+        return this.baseObject.getShoulderEntityRight();
+    }    
+    
+    @Override 
+    public void setShoulderEntityLeft(Entity entity) {
+        this.baseObject.setShoulderEntityLeft(entity);
+    }
+    
+    @Override 
+    public Entity getShoulderEntityLeft() {
+        return this.baseObject.getShoulderEntityLeft();
+    }     
+
+    @Override
+    public void setPlayerListHeader(String header) {
+        baseObject.setPlayerListHeader(header);
+    }        
+  
     public WebsendPlayerCommandSender(Player baseObject, Plugin commandTargetPlugin) {
         this.baseObject = baseObject;
         this.commandTargetPlugin = commandTargetPlugin;
@@ -184,6 +265,8 @@ public class WebsendPlayerCommandSender implements Player  {
     public void sendBlockChange(org.bukkit.Location param0, org.bukkit.Material param1, byte param2) {
         baseObject.sendBlockChange(param0, param1, param2);
     }
+    
+    
 
     @Override
     public boolean sendChunkChange(org.bukkit.Location param0, int param1, int param2, int param3, byte[] param4) {
@@ -374,6 +457,16 @@ public class WebsendPlayerCommandSender implements Player  {
     public boolean canSee(org.bukkit.entity.Player param0) {
         return baseObject.canSee(param0);
     }
+    
+    @Override
+    public void showPlayer(Plugin plugin, Player player) {
+        this.baseObject.showPlayer(plugin, player);
+    }
+
+    @Override
+    public void hidePlayer(Plugin plugin, Player player) {
+        this.baseObject.hidePlayer(plugin, player);
+    }      
 
     @Override
     public boolean isOnGround() {
@@ -1403,5 +1496,105 @@ public class WebsendPlayerCommandSender implements Player  {
 
     public Spigot spigot() {
         return baseObject.spigot();
+    }
+
+    @Override
+    public boolean hasCooldown(Material mtrl) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int getCooldown(Material mtrl) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setCooldown(Material mtrl, int i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean discoverRecipe(NamespacedKey nk) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int discoverRecipes(Collection<NamespacedKey> clctn) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean undiscoverRecipe(NamespacedKey nk) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Block getTargetBlockExact(int i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Block getTargetBlockExact(int i, FluidCollisionMode fcm) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public RayTraceResult rayTraceBlocks(double d) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public RayTraceResult rayTraceBlocks(double d, FluidCollisionMode fcm) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isSwimming() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setSwimming(boolean bln) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isRiptiding() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public double getHeight() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public double getWidth() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public BoundingBox getBoundingBox() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isPersistent() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setPersistent(boolean bln) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public PistonMoveReaction getPistonMoveReaction() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public BlockFace getFacing() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -22,6 +22,11 @@ public class WebsendConsoleCommandSender implements ConsoleCommandSender {
     private final ConsoleCommandSender parent;
     private final Plugin commandTargetPlugin;
 
+    @Override
+    public Spigot spigot() { 
+        return parent.spigot();
+    }
+    
     public WebsendConsoleCommandSender(ConsoleCommandSender parent, Plugin commandTargetPlugin) {
         this.parent = parent;
         this.commandTargetPlugin = commandTargetPlugin;
