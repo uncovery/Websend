@@ -209,7 +209,7 @@ public abstract class JSONSerializer {
                 Enchantment enchantment = set.getKey();
                 JSONObject enchantmentObj = new JSONObject();
                 {
-                    enchantmentObj.put("Type", enchantment.getId());
+                    enchantmentObj.put("Type", enchantment.getKey());
                     enchantmentObj.put("Name", enchantment.getName());
                     enchantmentObj.put("MaxLevel", enchantment.getMaxLevel());
                     enchantmentObj.put("StartLevel", enchantment.getStartLevel());
@@ -271,7 +271,7 @@ public abstract class JSONSerializer {
                     Enchantment enchantment = set.getKey();
                     JSONObject enchantmentObj = new JSONObject();
                     {
-                        enchantmentObj.put("Type", enchantment.getId());
+                        enchantmentObj.put("Type", enchantment.getKey());
                         enchantmentObj.put("Name", enchantment.getName());
                         enchantmentObj.put("MaxLevel", enchantment.getMaxLevel());
                         enchantmentObj.put("StartLevel", enchantment.getStartLevel());

@@ -23,7 +23,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-public class WebsendPlayerCommandSender implements Player {
+public class WebsendPlayerCommandSender implements Player  {
+    
     /* This class allows tapping into command output from plugins
      * if the output is sent through the commandsender.
      * Note to anyone having compilation problems: Compile against Bukkit, not CraftBukkit.
@@ -33,7 +34,7 @@ public class WebsendPlayerCommandSender implements Player {
 
     private final Player baseObject;
     private final Plugin commandTargetPlugin;
-
+    
     public WebsendPlayerCommandSender(Player baseObject, Plugin commandTargetPlugin) {
         this.baseObject = baseObject;
         this.commandTargetPlugin = commandTargetPlugin;
@@ -187,11 +188,6 @@ public class WebsendPlayerCommandSender implements Player {
     @Override
     public boolean sendChunkChange(org.bukkit.Location param0, int param1, int param2, int param3, byte[] param4) {
         return baseObject.sendChunkChange(param0, param1, param2, param3, param4);
-    }
-
-    @Override
-    public void sendBlockChange(org.bukkit.Location param0, int param1, byte param2) {
-        baseObject.sendBlockChange(param0, param1, param2);
     }
 
     @Override
@@ -564,18 +560,15 @@ public class WebsendPlayerCommandSender implements Player {
         return baseObject.getEyeLocation();
     }
 
-    @Override
-    public java.util.List<org.bukkit.block.Block> getLineOfSight(java.util.HashSet<java.lang.Byte> param0, int param1) {
+    public java.util.List<org.bukkit.block.Block> getLineOfSight(java.util.HashSet<Material> param0, int param1) {
         return baseObject.getLineOfSight(param0, param1);
     }
 
-    @Override
-    public org.bukkit.block.Block getTargetBlock(java.util.HashSet<java.lang.Byte> param0, int param1) {
+    public org.bukkit.block.Block getTargetBlock(java.util.HashSet<Material> param0, int param1) {
         return baseObject.getTargetBlock(param0, param1);
     }
 
-    @Override
-    public java.util.List<org.bukkit.block.Block> getLastTwoTargetBlocks(java.util.HashSet<java.lang.Byte> param0, int param1) {
+    public java.util.List<org.bukkit.block.Block> getLastTwoTargetBlocks(java.util.HashSet<Material> param0, int param1) {
         return baseObject.getLastTwoTargetBlocks(param0, param1);
     }
 
@@ -620,18 +613,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public int _INVALID_getLastDamage() {
-        return baseObject._INVALID_getLastDamage();
-    }
-
-    @Override
     public void setLastDamage(double param0) {
         baseObject.setLastDamage(param0);
-    }
-
-    @Override
-    public void _INVALID_setLastDamage(int param0) {
-        baseObject._INVALID_setLastDamage(param0);
     }
 
     @Override
@@ -943,18 +926,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void _INVALID_damage(int param0) {
-        baseObject._INVALID_damage(param0);
-    }
-
-    @Override
     public void damage(double param0, org.bukkit.entity.Entity param1) {
         baseObject.damage(param0, param1);
-    }
-
-    @Override
-    public void _INVALID_damage(int param0, org.bukkit.entity.Entity param1) {
-        baseObject._INVALID_damage(param0, param1);
     }
 
     @Override
@@ -963,18 +936,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public int _INVALID_getHealth() {
-        return baseObject._INVALID_getHealth();
-    }
-
-    @Override
     public void setHealth(double param0) {
         baseObject.setHealth(param0);
-    }
-
-    @Override
-    public void _INVALID_setHealth(int param0) {
-        baseObject._INVALID_setHealth(param0);
     }
 
     @Override
@@ -982,19 +945,10 @@ public class WebsendPlayerCommandSender implements Player {
         return baseObject.getMaxHealth();
     }
 
-    @Override
-    public int _INVALID_getMaxHealth() {
-        return baseObject._INVALID_getMaxHealth();
-    }
 
     @Override
     public void setMaxHealth(double param0) {
         baseObject.setMaxHealth(param0);
-    }
-
-    @Override
-    public void _INVALID_setMaxHealth(int param0) {
-        baseObject._INVALID_setMaxHealth(param0);
     }
 
     @Override
@@ -1102,9 +1056,8 @@ public class WebsendPlayerCommandSender implements Player {
         return baseObject.isBanned();
     }
 
-    @Override
     public void setBanned(boolean param0) {
-        baseObject.setBanned(param0);
+        
     }
 
     @Override
