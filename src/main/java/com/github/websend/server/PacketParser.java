@@ -10,10 +10,10 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.UUID;
 import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -77,33 +77,46 @@ public class PacketParser {
     }
 
     public static void parseDoCommandAsConsole(DataInputStream in, DataOutputStream out) throws IOException {
+        Main.logDebugInfo("starting parseDoCommandAsConsole... ");
         String command = readString(in);
+        Main.logDebugInfo("got string command: " + command);
         boolean success;
         try {
             //config check?
+            Main.logDebugInfo("checking areCommandExecutorsWrapped... ");
             if (Main.getSettings().areCommandExecutorsWrapped()) {
+                Main.logDebugInfo("wrapped, do we have a valid command?");
                 PluginCommand pluginCommand = Main.getBukkitServer().getPluginCommand(command);
                 if(pluginCommand != null){
+                    Main.logDebugInfo("Valid command!");
                     Plugin targetPlugin = pluginCommand.getPlugin();
+                    Main.logDebugInfo("running command....");
                     success = Main.getBukkitServer().dispatchCommand(
                         new WebsendConsoleCommandSender(
                                 Main.getBukkitServer().getConsoleSender(),
                                 targetPlugin),
                                 command);
-                }else{
+                    Main.logDebugInfo("Done running command!");
+                } else {
                     Main.getMainLogger().log(Level.WARNING, "Cannot execute command '"+command+"': Command does not exist.");
                     success = false;
                 }
             } else {
-                success = Main.getBukkitServer().dispatchCommand(Main.getBukkitServer().getConsoleSender(), command);
+                Main.logDebugInfo("Not wrapped!");                
+                ConsoleCommandSender sender = Main.getBukkitServer().getConsoleSender();
+                Main.logDebugInfo("using ConsoleCommandSender, dispatching now:");
+                success = Main.getBukkitServer().dispatchCommand(sender, command);
             }
         } catch (Exception ex) {
-            Main.logDebugInfo(Level.WARNING, "Websend caught an exception while running command '" + command + "'", ex);
+            ex.printStackTrace(System.out);
+            Main.logDebugInfo(Level.WARNING, "Websend caught an exception while running command '" + command + "': " + ex.toString());
             success = false;
         }
         if (success) {
+            Main.logDebugInfo("parseDoCommandAsConsole success!");
             out.writeInt(1);
         } else {
+            Main.logDebugInfo("parseDoCommandAsConsole failed!");
             out.writeInt(0);
         }
         out.flush();

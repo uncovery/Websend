@@ -34,7 +34,9 @@ public abstract class CommunicationServer extends Thread {
     @Override
     public void run() {
         int fails = 0;
+        Main.logDebugInfo(Level.WARNING, "step 1");
         while (running) {
+            Main.logDebugInfo(Level.WARNING, "step 1");
             if (fails == MAX_FAILS) {
                 try {
                     Main.getMainLogger().info("Max amount of fails reached. Waiting for " + (FAILURE_SLEEP_TIME / 1000) + " seconds until retry.");
@@ -45,14 +47,17 @@ public abstract class CommunicationServer extends Thread {
                 }
             }
             try {
+                Main.logDebugInfo(Level.WARNING, "step 2");
                 Main.logDebugInfo(Level.INFO, "Starting server");
                 startServer();
             } catch (Exception ex) {
+                Main.logDebugInfo(Level.WARNING, "step 3");
                 Main.getMainLogger().log(Level.SEVERE, "Server encountered an error. Attempting restart.", ex);
                 connected = false;
                 authenticated = false;
 
                 try {
+                    Main.logDebugInfo(Level.WARNING, "step 4");
                     serverSkt.close();
                 } catch (IOException ex1) {
                     Main.logDebugInfo(Level.WARNING, "Failed to close server.", ex1);
@@ -83,12 +88,10 @@ public abstract class CommunicationServer extends Thread {
                 DataInputStream in = new DataInputStream(skt.getInputStream());
                 DataOutputStream out = new DataOutputStream(skt.getOutputStream());
                 connected = true;
-
                 Main.logDebugInfo("Trying to read first byte...");
                 try {
                     if (in.readByte() == 21) {
                         Main.logDebugInfo("First packet is authentication request packet.");
-                        
                         authenticated = PacketParser.parseAuthenticationRequestPacket(in, out);
                         if (!authenticated) {
                             Main.getMainLogger().log(Level.INFO, "Client failed to authenticate! Disconnecting.");
@@ -102,7 +105,8 @@ public abstract class CommunicationServer extends Thread {
                     }
 
                     while (connected) {
-                        byte packetHeader = in.readByte();
+                        Byte packetHeader = in.readByte();
+                        Main.logDebugInfo("read packetheader, checking next step");
                         if (packetHeader == 1) {
                             Main.logDebugInfo("Got packet header: DoCommandAsPlayer");
                             PacketParser.parseDoCommandAsPlayer(in, out);
@@ -134,15 +138,15 @@ public abstract class CommunicationServer extends Thread {
                             Main.logDebugInfo("Got custom packet header: " + packetHeader);
                             customPacketHandlers.get(packetHeader).onHeaderReceived(in, out);
                         } else {
-                            Main.getMainLogger().log(Level.WARNING, "Unsupported packet header!");
+                            Main.getMainLogger().log(Level.WARNING, "Unsupported packet header!" + packetHeader);
                         }
                     }
                     Main.logDebugInfo("Closing connection with client.");
                     out.flush();
                     out.close();
                     in.close();
-                } catch (IOException ex) {
-                    Main.getMainLogger().log(Level.WARNING, "IOException while communicating to client! Disconnecting. ("+ex.getMessage()+")");
+                } catch (IOException ex) {  
+                    Main.getMainLogger().log(Level.WARNING, "IOException while communicating to client! Disconnecting. ("+ex.getMessage() + ")");
                     connected = false;
                 }
             } else {
