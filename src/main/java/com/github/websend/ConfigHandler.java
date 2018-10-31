@@ -103,8 +103,10 @@ public class ConfigHandler {
                 String value = line.replaceFirst("DEBUG_WEBSEND=", "");
                 if (value.toLowerCase().trim().contains("true")) {
                     settings.setDebugMode(true);
+                    Main.getMainLogger().log(Level.WARNING, "Debug Mode is active!");
                 } else {
                     settings.setDebugMode(false);
+                    Main.getMainLogger().log(Level.WARNING, "Debug Mode is inactive!");
                 }
             } else if (line.startsWith("WEBLISTENER_ACTIVE=")) {
                 String value = line.replaceFirst("WEBLISTENER_ACTIVE=", "");
