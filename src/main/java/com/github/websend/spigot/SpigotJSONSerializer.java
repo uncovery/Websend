@@ -11,7 +11,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class SpigotJSONSerializer extends JSONSerializer{
-    @Override
     public JSONObject serializeMetaCustom(ItemMeta meta) throws JSONException {
         if(meta.getClass().getSimpleName().equals("CraftMetaBanner")){
             return serializeMetaBanner(meta);
