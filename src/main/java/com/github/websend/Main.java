@@ -6,7 +6,6 @@ import com.github.websend.script.ScriptManager;
 import com.github.websend.server.CommunicationServer;
 import com.github.websend.server.NonSecureCommunicationServer;
 import com.github.websend.server.SecureCommunicationServer;
-import org.bukkit.Server;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,9 +19,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Main extends JavaPlugin {
+
     private static Settings settings;
     private static Logger logger;
-    private static Server bukkitServer;
     private static Main plugin;
     private static File scriptsDir;
     private static int port;
@@ -38,10 +37,6 @@ public class Main extends JavaPlugin {
     public static void doCommand( String[] args, String ply ) {
         POSTRequest request = new POSTRequest( Main.getSettings().getURL(), args, ply, false );
         requestThreadPool.doRequest( request );
-    }
-
-    public static Server getBukkitServer() {
-        return bukkitServer;
     }
 
     public static Main getInstance() {
@@ -94,7 +89,6 @@ public class Main extends JavaPlugin {
     public void onEnable() {
         // Setup vars
         logger = this.getLogger();
-        bukkitServer = this.getServer();
         plugin = this;
         port = this.getServer().getPort();
 

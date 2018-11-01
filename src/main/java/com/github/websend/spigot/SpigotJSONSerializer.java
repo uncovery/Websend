@@ -53,14 +53,12 @@ public class SpigotJSONSerializer extends JSONSerializer {
         }
         try {
             return targetObject.getClass().getMethod( methodName, argTypes ).invoke( targetObject, ( Object[] ) args );
-        } catch ( NoSuchMethodException ex ) {
+        } catch ( NoSuchMethodException | IllegalArgumentException ex ) {
             Main.logError( "Cannot retrieve Spigot object data: Spigot was detected, but class definition does not match", ex );
         } catch ( SecurityException ex ) {
             Main.logError( "Cannot retrieve Spigot object data due to security settings preventing reflection", ex );
         } catch ( IllegalAccessException ex ) {
             Main.logError( "Cannot retrieve Spigot object data: no access", ex );
-        } catch ( IllegalArgumentException ex ) {
-            Main.logError( "Cannot retrieve Spigot object data: Spigot was detected, but class definition does not match", ex );
         } catch ( InvocationTargetException ex ) {
             Main.logError( "An exception occured while retrieving Spigot object data", ex );
         }

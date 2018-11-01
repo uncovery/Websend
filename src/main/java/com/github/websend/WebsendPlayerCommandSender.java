@@ -16,6 +16,8 @@ import org.bukkit.inventory.Merchant;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.BoundingBox;
+import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
 import java.util.Collection;
@@ -847,12 +849,17 @@ public class WebsendPlayerCommandSender implements Player {
 
     @Override
     public double getHeight() {
-        return 0;
+        return baseObject.getHeight();
     }
 
     @Override
     public double getWidth() {
-        return 0;
+        return baseObject.getWidth();
+    }
+
+    @Override
+    public BoundingBox getBoundingBox() {
+        return baseObject.getBoundingBox();
     }
 
     @Override
@@ -1419,6 +1426,26 @@ public class WebsendPlayerCommandSender implements Player {
 
     public List<Block> getLastTwoTargetBlocks( Set<Material> set, int i ) {
         return baseObject.getLastTwoTargetBlocks( set, i );
+    }
+
+    @Override
+    public Block getTargetBlockExact( int i ) {
+        return baseObject.getTargetBlockExact( i );
+    }
+
+    @Override
+    public Block getTargetBlockExact( int i, FluidCollisionMode fluidCollisionMode ) {
+        return baseObject.getTargetBlockExact( i, fluidCollisionMode );
+    }
+
+    @Override
+    public RayTraceResult rayTraceBlocks( double v ) {
+        return baseObject.rayTraceBlocks( v );
+    }
+
+    @Override
+    public RayTraceResult rayTraceBlocks( double v, FluidCollisionMode fluidCollisionMode ) {
+        return baseObject.rayTraceBlocks( v, fluidCollisionMode );
     }
 
     public AttributeInstance getAttribute( Attribute atrbt ) {

@@ -1,5 +1,7 @@
 package com.github.websend;
 
+import org.bukkit.Bukkit;
+
 import java.io.*;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
@@ -91,7 +93,7 @@ public class ConfigHandler {
                 int convertedValue = 0;
                 try {
                     convertedValue = Integer.parseInt( value.trim() );
-                    if ( convertedValue == Main.getBukkitServer().getPort() ) {
+                    if ( convertedValue == Bukkit.getPort() ) {
                         Main.getMainLogger().log( Level.WARNING, "You are trying to host Websend on the minecraft server port! Choose a different port." );
                     }
                 } catch ( Exception ex ) {

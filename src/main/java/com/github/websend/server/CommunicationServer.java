@@ -17,6 +17,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -146,6 +147,8 @@ public abstract class CommunicationServer extends Thread {
                 } catch ( IOException ex ) {
                     Main.getMainLogger().log( Level.WARNING, "IOException while communicating to client! Disconnecting. (" + ex.getMessage() + ")" );
                     connected = false;
+                } catch ( InterruptedException | ExecutionException e ) {
+                    e.printStackTrace();
                 }
             } else {
                 Main.getMainLogger().log( Level.WARNING, "Connection request from unauthorized address!" );

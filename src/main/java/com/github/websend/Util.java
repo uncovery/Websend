@@ -1,5 +1,6 @@
 package com.github.websend;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.math.BigInteger;
@@ -37,7 +38,7 @@ public class Util {
         Player player = null;
         try {
             UUID playerID = UUID.fromString( playerStr );
-            player = Main.getBukkitServer().getPlayer( playerID );
+            player = Bukkit.getPlayer( playerID );
         } catch ( IllegalArgumentException ex ) {
             if ( Main.getSettings().isDebugMode() ) {
                 Main.logDebugInfo( Level.INFO,
@@ -47,7 +48,7 @@ public class Util {
         }
 
         if ( player == null ) {
-            player = Main.getBukkitServer().getPlayer( playerStr );
+            player = Bukkit.getPlayer( playerStr );
         }
 
         return player;
