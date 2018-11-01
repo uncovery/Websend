@@ -12,6 +12,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 
 public class PacketParser {
@@ -32,11 +33,11 @@ public class PacketParser {
         return success;
     }
 
-    public static void parseDoCommandAsPlayer( DataInputStream in, DataOutputStream out ) throws IOException {
+    public static void parseDoCommandAsPlayer( DataInputStream in, DataOutputStream out ) throws IOException, ExecutionException, InterruptedException {
         String command = readString( in );
         String playerStr = readString( in );
 
-        Player player = Util.findPlayer( playerStr );
+        Player player = Bukkit.getScheduler().callSyncMethod( Main.getInstance(), () -> Util.findPlayer( playerStr ) ).get();
 
         if ( player == null ) {
             Main.logDebugInfo( Level.WARNING, "Can't execute command (" + command + ") as player: Player cannot be found (" + playerStr + ")" );
@@ -115,13 +116,13 @@ public class PacketParser {
         Main.getMainLogger().info( message );
     }
 
-    public static void parseWriteOutputToPlayer( DataInputStream in, DataOutputStream out ) throws IOException {
+    public static void parseWriteOutputToPlayer( DataInputStream in, DataOutputStream out ) throws IOException, ExecutionException, InterruptedException {
         String message = readString( in );
         String playerStr = readString( in );
-        Player player = Util.findPlayer( playerStr );
+        Player player = Bukkit.getScheduler().callSyncMethod( Main.getInstance(), () -> Util.findPlayer( playerStr ) ).get();
         if ( player != null ) {
             out.writeInt( 1 );
-            player.sendMessage( message );
+            Bukkit.getScheduler().runTask( Main.getInstance(), () -> player.sendMessage( message ) );
         } else {
             out.writeInt( 0 );
         }
@@ -130,7 +131,7 @@ public class PacketParser {
 
     public static void parseBroadcast( DataInputStream in, DataOutputStream out ) throws IOException {
         String message = readString( in );
-        Bukkit.broadcastMessage( ChatColor.translateAlternateColorCodes( '&', message ) );
+        Bukkit.getScheduler().runTask( Main.getInstance(), () -> Bukkit.broadcastMessage( ChatColor.translateAlternateColorCodes( '&', message ) ) );
     }
 
     public static void parseStartPluginOutputRecording( DataInputStream in, DataOutputStream out ) throws IOException {
