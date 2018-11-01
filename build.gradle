@@ -28,7 +28,7 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile 'org.spigotmc:spigot:1.13.1-R0.1-SNAPSHOT'
+    compile 'org.spigotmc:spigot:1.13.2-R0.1-SNAPSHOT'
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.6'
     compile group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.10'
     compile group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.6'
@@ -40,7 +40,7 @@ shadowJar {
     version = '2.6.0-SNAPSHOT'
     classifier = null
     dependencies {
-        exclude(dependency('org.spigotmc:spigot:1.13.1-R0.1-SNAPSHOT'))
+        exclude(dependency('org.spigotmc:spigot:1.13.2-R0.1-SNAPSHOT'))
     }
 }
 
