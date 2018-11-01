@@ -19,92 +19,92 @@ public class Settings {
     private boolean sslEnabled = false;
     private String sslPassword = null;
     private boolean extendedPlayerDataEnabled;
-    
+
     public URL getURL() {
         return URL;
+    }
+
+    public void setURL( URL URL ) {
+        this.URL = URL;
     }
 
     public boolean isDebugMode() {
         return debugMode;
     }
 
+    public void setDebugMode( boolean debugMode ) {
+        this.debugMode = debugMode;
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword( String password ) {
+        this.password = password;
     }
 
     public int getPort() {
         return port;
     }
 
+    public void setPort( int port ) {
+        this.port = port;
+    }
+
     public String getResponseURL() {
         return responseURL;
+    }
+
+    public void setResponseURL( String responseURL ) {
+        this.responseURL = responseURL;
     }
 
     public String getSalt() {
         return salt;
     }
 
+    public void setSalt( String salt ) {
+        this.salt = salt;
+    }
+
     public String getHashingAlgorithm() {
         return this.algorithm;
+    }
+
+    public void setHashingAlgorithm( String algorithm ) {
+        this.algorithm = algorithm;
     }
 
     public boolean isServerActive() {
         return serverActive;
     }
 
+    public void setServerActive( boolean serverActive ) {
+        this.serverActive = serverActive;
+    }
+
     public InetAddress getServerBindIP() {
         return serverBindIP;
     }
 
-    public void setURL(URL URL) {
-        this.URL = URL;
-    }
-
-    public void setDebugMode(boolean debugMode) {
-        this.debugMode = debugMode;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    public void setResponseURL(String responseURL) {
-        this.responseURL = responseURL;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
-
-    public void setServerActive(boolean serverActive) {
-        this.serverActive = serverActive;
-    }
-
-    public void setHashingAlgorithm(String algorithm) {
-        this.algorithm = algorithm;
+    public void setServerBindIP( InetAddress ip ) {
+        this.serverBindIP = ip;
     }
 
     public boolean areRequestsGZipped() {
         return gzipRequests;
     }
 
-    public void setGzipRequests(boolean gzipRequests) {
+    public void setGzipRequests( boolean gzipRequests ) {
         this.gzipRequests = gzipRequests;
-    }
-
-    public void setServerBindIP(InetAddress ip) {
-        this.serverBindIP = ip;
     }
 
     public boolean areCommandExecutorsWrapped() {
         return wrapCommandExecutor;
     }
 
-    public void setWrapCommandExecutor(boolean b) {
+    public void setWrapCommandExecutor( boolean b ) {
         this.wrapCommandExecutor = b;
     }
 
@@ -112,22 +112,23 @@ public class Settings {
         return sslEnabled;
     }
 
-    public void setSSLEnabled(boolean sslEnabled) {
+    public void setSSLEnabled( boolean sslEnabled ) {
         this.sslEnabled = sslEnabled;
     }
 
     public boolean isExtendedPlayerDataEnabled() {
         return extendedPlayerDataEnabled;
     }
-    
-    public void setExtendedPlayerDataEnabled(boolean enabled){
+
+    public void setExtendedPlayerDataEnabled( boolean enabled ) {
         this.extendedPlayerDataEnabled = enabled;
     }
+
     public String getSSLPassword() {
         return this.sslPassword;
     }
 
-    public void setSslPassword(String sslPassword) {
+    public void setSslPassword( String sslPassword ) {
         this.sslPassword = sslPassword;
     }
 }

@@ -1,8 +1,8 @@
 name: Websend
 main: com.github.websend.Main
-version: 2.7
+version: 2.6.0
 description: Plug-in to enable variables-transfer to the interwebs and backwards.
-author: Waterflames
+authors: [Waterflames, FrozenLegend]
 api-version: 1.13
 commands:
    websend:

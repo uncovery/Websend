@@ -1,8 +1,5 @@
 package com.github.websend;
 
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
 import org.bukkit.Server;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.conversations.Conversation;
@@ -11,6 +8,10 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
+
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 
 public class WebsendConsoleCommandSender implements ConsoleCommandSender {
     /* This class allows tapping into command output from plugins
@@ -22,34 +23,29 @@ public class WebsendConsoleCommandSender implements ConsoleCommandSender {
     private final ConsoleCommandSender parent;
     private final Plugin commandTargetPlugin;
 
-    @Override
-    public Spigot spigot() { 
-        return parent.spigot();
-    }
-    
-    public WebsendConsoleCommandSender(ConsoleCommandSender parent, Plugin commandTargetPlugin) {
+    public WebsendConsoleCommandSender( ConsoleCommandSender parent, Plugin commandTargetPlugin ) {
         this.parent = parent;
         this.commandTargetPlugin = commandTargetPlugin;
     }
 
     @Override
-    public void sendMessage(java.lang.String param0) {
-        PluginOutputManager.handleLogRecord(commandTargetPlugin, new LogRecord(Level.INFO, param0));
-        parent.sendMessage(param0);
+    public void sendMessage( String param0 ) {
+        PluginOutputManager.handleLogRecord( commandTargetPlugin, new LogRecord( Level.INFO, param0 ) );
+        parent.sendMessage( param0 );
     }
 
     @Override
-    public void sendMessage(java.lang.String[] param0) {
-        for (String str : param0) {
-            PluginOutputManager.handleLogRecord(commandTargetPlugin, new LogRecord(Level.INFO, str));
+    public void sendMessage( String[] param0 ) {
+        for ( String str : param0 ) {
+            PluginOutputManager.handleLogRecord( commandTargetPlugin, new LogRecord( Level.INFO, str ) );
         }
-        parent.sendMessage(param0);
+        parent.sendMessage( param0 );
     }
 
     @Override
-    public void sendRawMessage(java.lang.String param0) {
-        PluginOutputManager.handleLogRecord(commandTargetPlugin, new LogRecord(Level.INFO, param0));
-        parent.sendRawMessage(param0);
+    public void sendRawMessage( String param0 ) {
+        PluginOutputManager.handleLogRecord( commandTargetPlugin, new LogRecord( Level.INFO, param0 ) );
+        parent.sendRawMessage( param0 );
     }
 
     @Override
@@ -63,48 +59,53 @@ public class WebsendConsoleCommandSender implements ConsoleCommandSender {
     }
 
     @Override
-    public boolean isPermissionSet(String string) {
-        return parent.isPermissionSet(string);
+    public Spigot spigot() {
+        return parent.spigot();
     }
 
     @Override
-    public boolean isPermissionSet(Permission prmsn) {
-        return parent.isPermissionSet(prmsn);
+    public boolean isPermissionSet( String string ) {
+        return parent.isPermissionSet( string );
     }
 
     @Override
-    public boolean hasPermission(String string) {
-        return parent.hasPermission(string);
+    public boolean isPermissionSet( Permission prmsn ) {
+        return parent.isPermissionSet( prmsn );
     }
 
     @Override
-    public boolean hasPermission(Permission prmsn) {
-        return parent.hasPermission(prmsn);
+    public boolean hasPermission( String string ) {
+        return parent.hasPermission( string );
     }
 
     @Override
-    public PermissionAttachment addAttachment(Plugin plugin, String string, boolean bln) {
-        return parent.addAttachment(plugin, string, bln);
+    public boolean hasPermission( Permission prmsn ) {
+        return parent.hasPermission( prmsn );
     }
 
     @Override
-    public PermissionAttachment addAttachment(Plugin plugin) {
-        return parent.addAttachment(plugin);
+    public PermissionAttachment addAttachment( Plugin plugin, String string, boolean bln ) {
+        return parent.addAttachment( plugin, string, bln );
     }
 
     @Override
-    public PermissionAttachment addAttachment(Plugin plugin, String string, boolean bln, int i) {
-        return parent.addAttachment(plugin, string, bln, i);
+    public PermissionAttachment addAttachment( Plugin plugin ) {
+        return parent.addAttachment( plugin );
     }
 
     @Override
-    public PermissionAttachment addAttachment(Plugin plugin, int i) {
-        return parent.addAttachment(plugin, i);
+    public PermissionAttachment addAttachment( Plugin plugin, String string, boolean bln, int i ) {
+        return parent.addAttachment( plugin, string, bln, i );
     }
 
     @Override
-    public void removeAttachment(PermissionAttachment pa) {
-        parent.removeAttachment(pa);
+    public PermissionAttachment addAttachment( Plugin plugin, int i ) {
+        return parent.addAttachment( plugin, i );
+    }
+
+    @Override
+    public void removeAttachment( PermissionAttachment pa ) {
+        parent.removeAttachment( pa );
     }
 
     @Override
@@ -123,8 +124,8 @@ public class WebsendConsoleCommandSender implements ConsoleCommandSender {
     }
 
     @Override
-    public void setOp(boolean bln) {
-        parent.setOp(bln);
+    public void setOp( boolean bln ) {
+        parent.setOp( bln );
     }
 
     @Override
@@ -133,22 +134,22 @@ public class WebsendConsoleCommandSender implements ConsoleCommandSender {
     }
 
     @Override
-    public void acceptConversationInput(String string) {
-        parent.acceptConversationInput(string);
+    public void acceptConversationInput( String string ) {
+        parent.acceptConversationInput( string );
     }
 
     @Override
-    public boolean beginConversation(Conversation c) {
-        return parent.beginConversation(c);
+    public boolean beginConversation( Conversation c ) {
+        return parent.beginConversation( c );
     }
 
     @Override
-    public void abandonConversation(Conversation c) {
-        parent.abandonConversation(c);
+    public void abandonConversation( Conversation c ) {
+        parent.abandonConversation( c );
     }
 
     @Override
-    public void abandonConversation(Conversation c, ConversationAbandonedEvent cae) {
-        parent.abandonConversation(c, cae);
+    public void abandonConversation( Conversation c, ConversationAbandonedEvent cae ) {
+        parent.abandonConversation( c, cae );
     }
 }
