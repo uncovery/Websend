@@ -849,17 +849,17 @@ public class WebsendPlayerCommandSender implements Player {
 
     @Override
     public double getHeight() {
-        return 0;
+        return baseObject.getHeight();
     }
 
     @Override
     public double getWidth() {
-        return 0;
+        return baseObject.getWidth();
     }
 
     @Override
     public BoundingBox getBoundingBox() {
-        return null;
+        return baseObject.getBoundingBox();
     }
 
     @Override
