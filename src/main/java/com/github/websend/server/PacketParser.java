@@ -10,6 +10,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
@@ -61,7 +62,12 @@ public class PacketParser {
                     success = false;
                 }
             } else {
-                success = Main.getBukkitServer().dispatchCommand(player, command);
+                success = Main.getBukkitServer().getScheduler().callSyncMethod(Main.getInstance(), new Callable<Boolean>() {
+                    @Override
+                    public Boolean call() {
+                        return Main.getBukkitServer().dispatchCommand( player, command );
+                    }
+                } ).get();
             }
         } catch (Exception ex) {
             Main.logDebugInfo(Level.WARNING, "Websend caught an exception while running command '" + command + "'", ex);
@@ -78,7 +84,7 @@ public class PacketParser {
 
     public static void parseDoCommandAsConsole(DataInputStream in, DataOutputStream out) throws IOException {
         Main.logDebugInfo("starting parseDoCommandAsConsole... ");
-        String command = readString(in);
+        final String command = readString(in);
         Main.logDebugInfo("got string command: " + command);
         boolean success;
         try {
@@ -103,9 +109,15 @@ public class PacketParser {
                 }
             } else {
                 Main.logDebugInfo("Not wrapped!");                
-                ConsoleCommandSender sender = Main.getBukkitServer().getConsoleSender();
+                final ConsoleCommandSender sender = Main.getBukkitServer().getConsoleSender();
                 Main.logDebugInfo("using ConsoleCommandSender, dispatching now:");
-                success = Main.getBukkitServer().dispatchCommand(sender, command);
+                success = Main.getBukkitServer().getScheduler().callSyncMethod(Main.getInstance(), new Callable<Boolean>() {
+                    @Override
+                    public Boolean call() {
+                        return Main.getBukkitServer().dispatchCommand( sender, command );
+                    }
+                } ).get();
+                
             }
         } catch (Exception ex) {
             ex.printStackTrace(System.out);
