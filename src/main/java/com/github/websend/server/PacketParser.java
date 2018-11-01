@@ -1,6 +1,7 @@
 package com.github.websend.server;
 
 import com.github.websend.*;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
@@ -47,16 +48,16 @@ public class PacketParser {
         boolean success;
         try {
             if ( Main.getSettings().areCommandExecutorsWrapped() ) {
-                PluginCommand pluginCommand = Main.getBukkitServer().getPluginCommand( command );
+                PluginCommand pluginCommand = Bukkit.getPluginCommand( command );
                 if ( pluginCommand != null ) {
                     Plugin targetPlugin = pluginCommand.getPlugin();
-                    success = Main.getBukkitServer().dispatchCommand( new WebsendPlayerCommandSender( player, targetPlugin ), command );
+                    success = Bukkit.getScheduler().callSyncMethod( Main.getInstance(), () -> Bukkit.dispatchCommand( new WebsendPlayerCommandSender( player, targetPlugin ), command ) ).get();
                 } else {
                     Main.getMainLogger().log( Level.WARNING, "Cannot execute command '" + command + "': Command does not exist." );
                     success = false;
                 }
             } else {
-                success = Main.getBukkitServer().dispatchCommand( player, command );
+                success = Bukkit.getScheduler().callSyncMethod( Main.getInstance(), () -> Bukkit.dispatchCommand( player, command ) ).get();
             }
         } catch ( Exception ex ) {
             Main.logDebugInfo( Level.WARNING, "Websend caught an exception while running command '" + command + "'", ex );
@@ -77,20 +78,20 @@ public class PacketParser {
         try {
             //config check?
             if ( Main.getSettings().areCommandExecutorsWrapped() ) {
-                PluginCommand pluginCommand = Main.getBukkitServer().getPluginCommand( command );
+                PluginCommand pluginCommand = Bukkit.getPluginCommand( command );
                 if ( pluginCommand != null ) {
                     Plugin targetPlugin = pluginCommand.getPlugin();
-                    success = Main.getBukkitServer().dispatchCommand(
+                    success = Bukkit.getScheduler().callSyncMethod( Main.getInstance(), () -> Bukkit.dispatchCommand(
                             new WebsendConsoleCommandSender(
-                                    Main.getBukkitServer().getConsoleSender(),
+                                    Bukkit.getConsoleSender(),
                                     targetPlugin ),
-                            command );
+                            command ) ).get();
                 } else {
                     Main.getMainLogger().log( Level.WARNING, "Cannot execute command '" + command + "': Command does not exist." );
                     success = false;
                 }
             } else {
-                success = Main.getBukkitServer().dispatchCommand( Main.getBukkitServer().getConsoleSender(), command );
+                success = Bukkit.getScheduler().callSyncMethod( Main.getInstance(), () -> Bukkit.dispatchCommand( Bukkit.getConsoleSender(), command ) ).get();
             }
         } catch ( Exception ex ) {
             Main.logDebugInfo( Level.WARNING, "Websend caught an exception while running command '" + command + "'", ex );
@@ -129,7 +130,7 @@ public class PacketParser {
 
     public static void parseBroadcast( DataInputStream in, DataOutputStream out ) throws IOException {
         String message = readString( in );
-        Main.getBukkitServer().broadcastMessage( ChatColor.translateAlternateColorCodes( '&', message ) );
+        Bukkit.broadcastMessage( ChatColor.translateAlternateColorCodes( '&', message ) );
     }
 
     public static void parseStartPluginOutputRecording( DataInputStream in, DataOutputStream out ) throws IOException {

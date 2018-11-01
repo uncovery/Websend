@@ -17,7 +17,7 @@ public class CommandParser {
 
     public CommandParser() {
         settings = Main.getSettings();
-        server = Main.getBukkitServer();
+        server = Bukkit.getServer();
     }
 
     // </editor-fold>

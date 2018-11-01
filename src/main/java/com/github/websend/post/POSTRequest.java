@@ -9,7 +9,7 @@ import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.ByteArrayBody;
 import org.apache.http.message.BasicNameValuePair;
-import org.bukkit.Server;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.json.JSONArray;
@@ -135,7 +135,6 @@ public class POSTRequest {
     }
 
     private String getJSONDataString( Player ply, String playerNameArg ) throws JSONException {
-        Server server = Main.getBukkitServer();
         JSONObject data = new JSONObject();
         {
             if ( ply != null ) {
@@ -156,7 +155,7 @@ public class POSTRequest {
             }
 
             JSONArray plugins = new JSONArray();
-            for ( Plugin plugin : server.getPluginManager().getPlugins() ) {
+            for ( Plugin plugin : Bukkit.getPluginManager().getPlugins() ) {
                 JSONObject plug = new JSONObject();
                 plug.put( "Name", plugin.getDescription().getFullName() );
                 plugins.put( plug );
@@ -165,14 +164,14 @@ public class POSTRequest {
 
             JSONObject serverSettings = new JSONObject();
             {
-                serverSettings.put( "Name", server.getServerName() );
-                serverSettings.put( "Build", server.getVersion() );
-                serverSettings.put( "Port", server.getPort() );
-                serverSettings.put( "NetherEnabled", server.getAllowNether() );
-                serverSettings.put( "FlyingEnabled", server.getAllowFlight() );
-                serverSettings.put( "DefaultGameMode", server.getDefaultGameMode() );
-                serverSettings.put( "OnlineMode", server.getOnlineMode() );
-                serverSettings.put( "MaxPlayers", server.getMaxPlayers() );
+                serverSettings.put( "Name", Bukkit.getServerName() );
+                serverSettings.put( "Build", Bukkit.getVersion() );
+                serverSettings.put( "Port", Bukkit.getPort() );
+                serverSettings.put( "NetherEnabled", Bukkit.getAllowNether() );
+                serverSettings.put( "FlyingEnabled", Bukkit.getAllowFlight() );
+                serverSettings.put( "DefaultGameMode", Bukkit.getDefaultGameMode() );
+                serverSettings.put( "OnlineMode", Bukkit.getOnlineMode() );
+                serverSettings.put( "MaxPlayers", Bukkit.getMaxPlayers() );
             }
             data.put( "ServerSettings", serverSettings );
 
@@ -180,7 +179,7 @@ public class POSTRequest {
             {
                 JSONArray onlinePlayers = new JSONArray();
                 {
-                    for ( Player cur : server.getOnlinePlayers() ) {
+                    for ( Player cur : Bukkit.getOnlinePlayers() ) {
                         boolean extendedData = Main.getSettings().isExtendedPlayerDataEnabled();
                         JSONObject curPlayer = JSONSerializer.getInstance().serializePlayer( cur, extendedData );
                         onlinePlayers.put( curPlayer );
