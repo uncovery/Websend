@@ -1,18 +1,6 @@
-UPDATED TO SPIGOT 1.10.2
-
-> added dependency on powernbt to allow for access to nbt data on items 
-
-instead of continually having a moving benchmark to handle on the plugin end, can now jsut parse the JSON in php.
+UPDATED TO SPIGOT 1.13.2 - BETA!
 
 
 
-ORIGINAL PROJECT README:
-
-Update february 2017:
-After almost 6 years, this plugin has reached an end-of-life status. 
-I will no longer be maintaining this plugin. 
-If you are a developer and are interested in the source code of this project, feel free to use it as it published under an MIT license.
-
-Official repository for the Bukkit plugin Websend. (http://dev.bukkit.org/bukkit-plugins/websend/)
-Maven is required to build this project.
+Inofficial repository for the Bukkit plugin Websend. (http://dev.bukkit.org/bukkit-plugins/websend/)
 Documentation is available here: https://github.com/Waterflames/Websend/wiki
