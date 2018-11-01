@@ -34,9 +34,7 @@ public abstract class CommunicationServer extends Thread {
     @Override
     public void run() {
         int fails = 0;
-        Main.logDebugInfo(Level.WARNING, "step 1");
         while (running) {
-            Main.logDebugInfo(Level.WARNING, "step 1");
             if (fails == MAX_FAILS) {
                 try {
                     Main.getMainLogger().info("Max amount of fails reached. Waiting for " + (FAILURE_SLEEP_TIME / 1000) + " seconds until retry.");
@@ -47,17 +45,14 @@ public abstract class CommunicationServer extends Thread {
                 }
             }
             try {
-                Main.logDebugInfo(Level.WARNING, "step 2");
                 Main.logDebugInfo(Level.INFO, "Starting server");
                 startServer();
             } catch (Exception ex) {
-                Main.logDebugInfo(Level.WARNING, "step 3");
                 Main.getMainLogger().log(Level.SEVERE, "Server encountered an error. Attempting restart.", ex);
                 connected = false;
                 authenticated = false;
 
                 try {
-                    Main.logDebugInfo(Level.WARNING, "step 4");
                     serverSkt.close();
                 } catch (IOException ex1) {
                     Main.logDebugInfo(Level.WARNING, "Failed to close server.", ex1);
