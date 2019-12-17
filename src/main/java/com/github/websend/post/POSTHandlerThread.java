@@ -1,12 +1,11 @@
 package com.github.websend.post;
 
 import com.github.websend.Main;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 public class POSTHandlerThread extends Thread {
     private final POSTHandlerThreadPool parent;
@@ -14,47 +13,47 @@ public class POSTHandlerThread extends Thread {
     private boolean running = true;
     private boolean busy = false;
     private POSTRequest currentRequest;
-
-    public POSTHandlerThread( POSTHandlerThreadPool parent, HttpClientBuilder builder ) {
-        super( "Websend POST Request Handler" );
+    
+    public POSTHandlerThread(POSTHandlerThreadPool parent, HttpClientBuilder builder) {
+        super("Websend POST Request Handler");
         this.httpClient = builder.build();
         this.parent = parent;
     }
 
     @Override
     public void run() {
-        while ( running ) {
-            if ( currentRequest != null ) {
+        while (running) {
+            if (currentRequest != null) {
                 busy = true;
                 try {
-                    currentRequest.run( httpClient );
-                } catch ( Exception ex ) {
-                    Main.getMainLogger().log( Level.SEVERE, "An exception occured while running a POST request.", ex );
+                    currentRequest.run(httpClient);
+                } catch (Exception ex) {
+                    Main.getMainLogger().log(Level.SEVERE, "An exception occured while running a POST request.", ex);
                 }
-                parent.onThreadDone( this );
+                parent.onThreadDone(this);
                 currentRequest = null;
                 busy = false;
             } else {
                 try {
-                    Thread.sleep( 20 );
-                } catch ( InterruptedException ex ) {
-                    Logger.getLogger( POSTHandlerThread.class.getName() ).log( Level.SEVERE, "Thread interrupted.", ex );
+                    Thread.sleep(20);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(POSTHandlerThread.class.getName()).log(Level.SEVERE, "Thread interrupted.", ex);
                 }
             }
         }
         try {
             httpClient.close();
-        } catch ( IOException ex ) {
-            Main.logDebugInfo( Level.WARNING, "An exception occured while closing the httpclient.", ex );
+        } catch (IOException ex) {
+            Main.logDebugInfo(Level.WARNING, "An exception occured while closing the httpclient.", ex);
         }
     }
 
-    public void startRequest( POSTRequest request ) {
-        if ( !busy ) {
+    public void startRequest(POSTRequest request) {
+        if (!busy) {
             currentRequest = request;
             busy = true;
         } else {
-            throw new RuntimeException( "Tried to assign request to busy thread!" );
+            throw new RuntimeException("Tried to assign request to busy thread!");
         }
     }
 
