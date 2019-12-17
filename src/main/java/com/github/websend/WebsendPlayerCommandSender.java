@@ -1,14 +1,19 @@
 package com.github.websend;
 
-import org.bukkit.*;
-import org.bukkit.advancement.Advancement;
-import org.bukkit.advancement.AdvancementProgress;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
+import org.bukkit.Statistic;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.PistonMoveReaction;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.MainHand;
@@ -16,17 +21,19 @@ import org.bukkit.inventory.Merchant;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
+import org.bukkit.advancement.Advancement;
+import org.bukkit.advancement.AdvancementProgress;
+import org.bukkit.FluidCollisionMode;
+import org.bukkit.NamespacedKey;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.PistonMoveReaction;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.RayTraceResult;
-import org.bukkit.util.Vector;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
+public abstract class WebsendPlayerCommandSender implements Player {
 
-public class WebsendPlayerCommandSender implements Player {
     /* This class allows tapping into command output from plugins
      * if the output is sent through the commandsender.
      * Note to anyone having compilation problems: Compile against Bukkit, not CraftBukkit.
@@ -37,74 +44,125 @@ public class WebsendPlayerCommandSender implements Player {
     private final Player baseObject;
     private final Plugin commandTargetPlugin;
 
-    public WebsendPlayerCommandSender( Player baseObject, Plugin commandTargetPlugin ) {
+
+    @Override
+    public int undiscoverRecipes(java.util.Collection<NamespacedKey> recipes) {
+        return this.baseObject.undiscoverRecipes(recipes);
+    }
+
+    @Override
+    public void updateCommands() {
+        this.baseObject.updateCommands();
+    }
+
+    @Override
+    public String getLocale() {
+        return this.baseObject.getLocale();
+    }
+
+    @Override
+    public void sendBlockChange(Location location, BlockData blockdata) {
+        baseObject.sendBlockChange(location, blockdata);
+    }
+
+    @Override
+    public AdvancementProgress getAdvancementProgress(Advancement advancement) {
+        return this.baseObject.getAdvancementProgress(advancement);
+    }
+
+    @Override
+    public void setPlayerListHeaderFooter(String header, String footer) {
+        baseObject.setPlayerListHeaderFooter(header, footer);
+    }
+
+    @Override
+    public void setPlayerListFooter(String footer) {
+        baseObject.setPlayerListFooter(footer);
+    }
+
+    @Override
+    public String getPlayerListFooter() {
+       return baseObject.getPlayerListFooter();
+    }
+
+    @Override
+    public String getPlayerListHeader() {
+       return baseObject.getPlayerListHeader();
+    }
+
+    @Override
+    public void setShoulderEntityRight(Entity entity) {
+        this.baseObject.setShoulderEntityRight(entity);
+    }
+
+    @Override
+    public Entity getShoulderEntityRight() {
+        return this.baseObject.getShoulderEntityRight();
+    }
+
+    @Override
+    public void setShoulderEntityLeft(Entity entity) {
+        this.baseObject.setShoulderEntityLeft(entity);
+    }
+
+    @Override
+    public Entity getShoulderEntityLeft() {
+        return this.baseObject.getShoulderEntityLeft();
+    }
+
+    @Override
+    public void setPlayerListHeader(String header) {
+        baseObject.setPlayerListHeader(header);
+    }
+
+    public WebsendPlayerCommandSender(Player baseObject, Plugin commandTargetPlugin) {
         this.baseObject = baseObject;
         this.commandTargetPlugin = commandTargetPlugin;
     }
 
     @Override
-    public void sendMessage( String param0 ) {
-        PluginOutputManager.handleLogRecord( commandTargetPlugin, new LogRecord( Level.INFO, param0 ) );
-        baseObject.sendMessage( param0 );
+    public void sendMessage(java.lang.String param0) {
+        PluginOutputManager.handleLogRecord(commandTargetPlugin, new LogRecord(Level.INFO, param0));
+        baseObject.sendMessage(param0);
     }
 
     @Override
-    public void sendMessage( String[] param0 ) {
-        for ( String str : param0 ) {
-            PluginOutputManager.handleLogRecord( commandTargetPlugin, new LogRecord( Level.INFO, str ) );
+    public void sendMessage(java.lang.String[] param0) {
+        for (String str : param0) {
+            PluginOutputManager.handleLogRecord(commandTargetPlugin, new LogRecord(Level.INFO, str));
         }
-        baseObject.sendMessage( param0 );
+        baseObject.sendMessage(param0);
     }
 
     @Override
-    public void sendRawMessage( String param0 ) {
-        PluginOutputManager.handleLogRecord( commandTargetPlugin, new LogRecord( Level.INFO, param0 ) );
-        baseObject.sendRawMessage( param0 );
+    public void sendRawMessage(java.lang.String param0) {
+        PluginOutputManager.handleLogRecord(commandTargetPlugin, new LogRecord(Level.INFO, param0));
+        baseObject.sendRawMessage(param0);
     }
 
     @Override
-    public String getDisplayName() {
+    public java.lang.String getDisplayName() {
         return baseObject.getDisplayName();
     }
 
     @Override
-    public void setDisplayName( String param0 ) {
-        baseObject.setDisplayName( param0 );
+    public void setDisplayName(java.lang.String param0) {
+        baseObject.setDisplayName(param0);
     }
 
     @Override
-    public String getPlayerListName() {
+    public java.lang.String getPlayerListName() {
         return baseObject.getPlayerListName();
     }
 
     @Override
-    public void setPlayerListName( String param0 ) {
-        baseObject.setPlayerListName( param0 );
+    public void setPlayerListName(java.lang.String param0) {
+        baseObject.setPlayerListName(param0);
     }
 
     @Override
-    public String getPlayerListHeader() {
-        return null;
-    }
-
-    @Override
-    public void setPlayerListHeader( String s ) {
-
-    }
-
-    @Override
-    public String getPlayerListFooter() {
-        return null;
-    }
-
-    @Override
-    public void setPlayerListFooter( String s ) {
-
-    }
-
-    @Override
-    public void setPlayerListHeaderFooter( String s, String s1 ) {
-
+    public void setCompassTarget(org.bukkit.Location param0) {
+        baseObject.setCompassTarget(param0);
     }
 
     @Override
@@ -113,28 +171,23 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setCompassTarget( org.bukkit.Location param0 ) {
-        baseObject.setCompassTarget( param0 );
-    }
-
-    @Override
     public java.net.InetSocketAddress getAddress() {
         return baseObject.getAddress();
     }
 
     @Override
-    public void kickPlayer( String param0 ) {
-        baseObject.kickPlayer( param0 );
+    public void kickPlayer(java.lang.String param0) {
+        baseObject.kickPlayer(param0);
     }
 
     @Override
-    public void chat( String param0 ) {
-        baseObject.chat( param0 );
+    public void chat(java.lang.String param0) {
+        baseObject.chat(param0);
     }
 
     @Override
-    public boolean performCommand( String param0 ) {
-        return baseObject.performCommand( param0 );
+    public boolean performCommand(java.lang.String param0) {
+        return baseObject.performCommand(param0);
     }
 
     @Override
@@ -143,8 +196,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setSneaking( boolean param0 ) {
-        baseObject.setSneaking( param0 );
+    public void setSneaking(boolean param0) {
+        baseObject.setSneaking(param0);
     }
 
     @Override
@@ -153,8 +206,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setSprinting( boolean param0 ) {
-        baseObject.setSprinting( param0 );
+    public void setSprinting(boolean param0) {
+        baseObject.setSprinting(param0);
     }
 
     @Override
@@ -168,73 +221,60 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
+    public void setSleepingIgnored(boolean param0) {
+        baseObject.setSleepingIgnored(param0);
+    }
+
+    @Override
     public boolean isSleepingIgnored() {
         return baseObject.isSleepingIgnored();
     }
 
     @Override
-    public void setSleepingIgnored( boolean param0 ) {
-        baseObject.setSleepingIgnored( param0 );
+    public void playNote(org.bukkit.Location param0, byte param1, byte param2) {
+        baseObject.playNote(param0, param1, param2);
     }
 
     @Override
-    public void playNote( org.bukkit.Location param0, byte param1, byte param2 ) {
-        baseObject.playNote( param0, param1, param2 );
+    public void playNote(org.bukkit.Location param0, org.bukkit.Instrument param1, org.bukkit.Note param2) {
+        baseObject.playNote(param0, param1, param2);
     }
 
     @Override
-    public void playNote( org.bukkit.Location param0, org.bukkit.Instrument param1, org.bukkit.Note param2 ) {
-        baseObject.playNote( param0, param1, param2 );
+    public void playSound(org.bukkit.Location param0, org.bukkit.Sound param1, float param2, float param3) {
+        baseObject.playSound(param0, param1, param2, param3);
     }
 
     @Override
-    public void playSound( org.bukkit.Location param0, org.bukkit.Sound param1, float param2, float param3 ) {
-        baseObject.playSound( param0, param1, param2, param3 );
+    public void playSound(org.bukkit.Location param0, java.lang.String param1, float param2, float param3) {
+        baseObject.playSound(param0, param1, param2, param3);
     }
 
     @Override
-    public void playSound( org.bukkit.Location param0, String param1, float param2, float param3 ) {
-        baseObject.playSound( param0, param1, param2, param3 );
+    public void playEffect(org.bukkit.Location param0, org.bukkit.Effect param1, int param2) {
+        baseObject.playEffect(param0, param1, param2);
     }
 
     @Override
-    public void playSound( Location location, Sound sound, SoundCategory soundCategory, float v, float v1 ) {
-
+    public <T> void playEffect(org.bukkit.Location param0, org.bukkit.Effect param1, T param2) {
+        baseObject.playEffect(param0, param1, param2);
     }
 
     @Override
-    public void playSound( Location location, String s, SoundCategory soundCategory, float v, float v1 ) {
+    public void sendBlockChange(org.bukkit.Location param0, org.bukkit.Material param1, byte param2) {
+        baseObject.sendBlockChange(param0, param1, param2);
+    }
 
+
+
+    @Override
+    public boolean sendChunkChange(org.bukkit.Location param0, int param1, int param2, int param3, byte[] param4) {
+        return baseObject.sendChunkChange(param0, param1, param2, param3, param4);
     }
 
     @Override
-    public void playEffect( org.bukkit.Location param0, org.bukkit.Effect param1, int param2 ) {
-        baseObject.playEffect( param0, param1, param2 );
-    }
-
-    @Override
-    public <T> void playEffect( org.bukkit.Location param0, org.bukkit.Effect param1, T param2 ) {
-        baseObject.playEffect( param0, param1, param2 );
-    }
-
-    @Override
-    public void sendBlockChange( org.bukkit.Location param0, org.bukkit.Material param1, byte param2 ) {
-        baseObject.sendBlockChange( param0, param1, param2 );
-    }
-
-    @Override
-    public void sendBlockChange( Location location, BlockData blockData ) {
-
-    }
-
-    @Override
-    public boolean sendChunkChange( org.bukkit.Location param0, int param1, int param2, int param3, byte[] param4 ) {
-        return baseObject.sendChunkChange( param0, param1, param2, param3, param4 );
-    }
-
-    @Override
-    public void sendMap( org.bukkit.map.MapView param0 ) {
-        baseObject.sendMap( param0 );
+    public void sendMap(org.bukkit.map.MapView param0) {
+        baseObject.sendMap(param0);
     }
 
     @Override
@@ -243,33 +283,28 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void awardAchievement( org.bukkit.Achievement param0 ) {
-        baseObject.awardAchievement( param0 );
+    public void incrementStatistic(org.bukkit.Statistic param0) {
+        baseObject.incrementStatistic(param0);
     }
 
     @Override
-    public void incrementStatistic( org.bukkit.Statistic param0 ) {
-        baseObject.incrementStatistic( param0 );
+    public void incrementStatistic(org.bukkit.Statistic param0, int param1) {
+        baseObject.incrementStatistic(param0, param1);
     }
 
     @Override
-    public void incrementStatistic( org.bukkit.Statistic param0, int param1 ) {
-        baseObject.incrementStatistic( param0, param1 );
+    public void incrementStatistic(org.bukkit.Statistic param0, org.bukkit.Material param1) {
+        baseObject.incrementStatistic(param0, param1);
     }
 
     @Override
-    public void incrementStatistic( org.bukkit.Statistic param0, org.bukkit.Material param1 ) {
-        baseObject.incrementStatistic( param0, param1 );
+    public void incrementStatistic(org.bukkit.Statistic param0, org.bukkit.Material param1, int param2) {
+        baseObject.incrementStatistic(param0, param1, param2);
     }
 
     @Override
-    public void incrementStatistic( org.bukkit.Statistic param0, org.bukkit.Material param1, int param2 ) {
-        baseObject.incrementStatistic( param0, param1, param2 );
-    }
-
-    @Override
-    public void setPlayerTime( long param0, boolean param1 ) {
-        baseObject.setPlayerTime( param0, param1 );
+    public void setPlayerTime(long param0, boolean param1) {
+        baseObject.setPlayerTime(param0, param1);
     }
 
     @Override
@@ -293,13 +328,13 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public org.bukkit.WeatherType getPlayerWeather() {
-        return baseObject.getPlayerWeather();
+    public void setPlayerWeather(org.bukkit.WeatherType param0) {
+        baseObject.setPlayerWeather(param0);
     }
 
     @Override
-    public void setPlayerWeather( org.bukkit.WeatherType param0 ) {
-        baseObject.setPlayerWeather( param0 );
+    public org.bukkit.WeatherType getPlayerWeather() {
+        return baseObject.getPlayerWeather();
     }
 
     @Override
@@ -308,13 +343,13 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void giveExp( int param0 ) {
-        baseObject.giveExp( param0 );
+    public void giveExp(int param0) {
+        baseObject.giveExp(param0);
     }
 
     @Override
-    public void giveExpLevels( int param0 ) {
-        baseObject.giveExpLevels( param0 );
+    public void giveExpLevels(int param0) {
+        baseObject.giveExpLevels(param0);
     }
 
     @Override
@@ -323,8 +358,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setExp( float param0 ) {
-        baseObject.setExp( param0 );
+    public void setExp(float param0) {
+        baseObject.setExp(param0);
     }
 
     @Override
@@ -333,8 +368,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setLevel( int param0 ) {
-        baseObject.setLevel( param0 );
+    public void setLevel(int param0) {
+        baseObject.setLevel(param0);
     }
 
     @Override
@@ -343,8 +378,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setTotalExperience( int param0 ) {
-        baseObject.setTotalExperience( param0 );
+    public void setTotalExperience(int param0) {
+        baseObject.setTotalExperience(param0);
     }
 
     @Override
@@ -353,8 +388,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setExhaustion( float param0 ) {
-        baseObject.setExhaustion( param0 );
+    public void setExhaustion(float param0) {
+        baseObject.setExhaustion(param0);
     }
 
     @Override
@@ -363,8 +398,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setSaturation( float param0 ) {
-        baseObject.setSaturation( param0 );
+    public void setSaturation(float param0) {
+        baseObject.setSaturation(param0);
     }
 
     @Override
@@ -373,8 +408,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setFoodLevel( int param0 ) {
-        baseObject.setFoodLevel( param0 );
+    public void setFoodLevel(int param0) {
+        baseObject.setFoodLevel(param0);
     }
 
     @Override
@@ -383,13 +418,13 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setBedSpawnLocation( org.bukkit.Location param0 ) {
-        baseObject.setBedSpawnLocation( param0 );
+    public void setBedSpawnLocation(org.bukkit.Location param0) {
+        baseObject.setBedSpawnLocation(param0);
     }
 
     @Override
-    public void setBedSpawnLocation( org.bukkit.Location param0, boolean param1 ) {
-        baseObject.setBedSpawnLocation( param0, param1 );
+    public void setBedSpawnLocation(org.bukkit.Location param0, boolean param1) {
+        baseObject.setBedSpawnLocation(param0, param1);
     }
 
     @Override
@@ -398,33 +433,33 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setAllowFlight( boolean param0 ) {
-        baseObject.setAllowFlight( param0 );
+    public void setAllowFlight(boolean param0) {
+        baseObject.setAllowFlight(param0);
     }
 
     @Override
-    public void hidePlayer( org.bukkit.entity.Player param0 ) {
-        baseObject.hidePlayer( param0 );
+    public void hidePlayer(org.bukkit.entity.Player param0) {
+        baseObject.hidePlayer(param0);
     }
 
     @Override
-    public void hidePlayer( Plugin plugin, Player player ) {
-
+    public void showPlayer(org.bukkit.entity.Player param0) {
+        baseObject.showPlayer(param0);
     }
 
     @Override
-    public void showPlayer( org.bukkit.entity.Player param0 ) {
-        baseObject.showPlayer( param0 );
+    public boolean canSee(org.bukkit.entity.Player param0) {
+        return baseObject.canSee(param0);
     }
 
     @Override
-    public void showPlayer( Plugin plugin, Player player ) {
-
+    public void showPlayer(Plugin plugin, Player player) {
+        this.baseObject.showPlayer(plugin, player);
     }
 
     @Override
-    public boolean canSee( org.bukkit.entity.Player param0 ) {
-        return baseObject.canSee( param0 );
+    public void hidePlayer(Plugin plugin, Player player) {
+        this.baseObject.hidePlayer(plugin, player);
     }
 
     @Override
@@ -438,8 +473,18 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setFlying( boolean param0 ) {
-        baseObject.setFlying( param0 );
+    public void setFlying(boolean param0) {
+        baseObject.setFlying(param0);
+    }
+
+    @Override
+    public void setFlySpeed(float param0) {
+        baseObject.setFlySpeed(param0);
+    }
+
+    @Override
+    public void setWalkSpeed(float param0) {
+        baseObject.setWalkSpeed(param0);
     }
 
     @Override
@@ -448,23 +493,13 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setFlySpeed( float param0 ) {
-        baseObject.setFlySpeed( param0 );
-    }
-
-    @Override
     public float getWalkSpeed() {
         return baseObject.getWalkSpeed();
     }
 
     @Override
-    public void setWalkSpeed( float param0 ) {
-        baseObject.setWalkSpeed( param0 );
-    }
-
-    @Override
-    public void setTexturePack( String param0 ) {
-        baseObject.setTexturePack( param0 );
+    public void setTexturePack(java.lang.String param0) {
+        baseObject.setTexturePack(param0);
     }
 
     @Override
@@ -473,8 +508,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setScoreboard( org.bukkit.scoreboard.Scoreboard param0 ) {
-        baseObject.setScoreboard( param0 );
+    public void setScoreboard(org.bukkit.scoreboard.Scoreboard param0) {
+        baseObject.setScoreboard(param0);
     }
 
     @Override
@@ -483,8 +518,13 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setHealthScaled( boolean param0 ) {
-        baseObject.setHealthScaled( param0 );
+    public void setHealthScaled(boolean param0) {
+        baseObject.setHealthScaled(param0);
+    }
+
+    @Override
+    public void setHealthScale(double param0) {
+        baseObject.setHealthScale(param0);
     }
 
     @Override
@@ -493,12 +533,7 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setHealthScale( double param0 ) {
-        baseObject.setHealthScale( param0 );
-    }
-
-    @Override
-    public String getName() {
+    public java.lang.String getName() {
         return baseObject.getName();
     }
 
@@ -513,8 +548,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public boolean setWindowProperty( org.bukkit.inventory.InventoryView.Property param0, int param1 ) {
-        return baseObject.setWindowProperty( param0, param1 );
+    public boolean setWindowProperty(org.bukkit.inventory.InventoryView.Property param0, int param1) {
+        return baseObject.setWindowProperty(param0, param1);
     }
 
     @Override
@@ -523,23 +558,23 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public org.bukkit.inventory.InventoryView openInventory( org.bukkit.inventory.Inventory param0 ) {
-        return baseObject.openInventory( param0 );
+    public org.bukkit.inventory.InventoryView openInventory(org.bukkit.inventory.Inventory param0) {
+        return baseObject.openInventory(param0);
     }
 
     @Override
-    public org.bukkit.inventory.InventoryView openWorkbench( org.bukkit.Location param0, boolean param1 ) {
-        return baseObject.openWorkbench( param0, param1 );
+    public org.bukkit.inventory.InventoryView openWorkbench(org.bukkit.Location param0, boolean param1) {
+        return baseObject.openWorkbench(param0, param1);
     }
 
     @Override
-    public org.bukkit.inventory.InventoryView openEnchanting( org.bukkit.Location param0, boolean param1 ) {
-        return baseObject.openEnchanting( param0, param1 );
+    public org.bukkit.inventory.InventoryView openEnchanting(org.bukkit.Location param0, boolean param1) {
+        return baseObject.openEnchanting(param0, param1);
     }
 
     @Override
-    public void openInventory( org.bukkit.inventory.InventoryView param0 ) {
-        baseObject.openInventory( param0 );
+    public void openInventory(org.bukkit.inventory.InventoryView param0) {
+        baseObject.openInventory(param0);
     }
 
     @Override
@@ -553,8 +588,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setItemInHand( org.bukkit.inventory.ItemStack param0 ) {
-        baseObject.setItemInHand( param0 );
+    public void setItemInHand(org.bukkit.inventory.ItemStack param0) {
+        baseObject.setItemInHand(param0);
     }
 
     @Override
@@ -563,23 +598,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setItemOnCursor( org.bukkit.inventory.ItemStack param0 ) {
-        baseObject.setItemOnCursor( param0 );
-    }
-
-    @Override
-    public boolean hasCooldown( Material material ) {
-        return false;
-    }
-
-    @Override
-    public int getCooldown( Material material ) {
-        return 0;
-    }
-
-    @Override
-    public void setCooldown( Material material, int i ) {
-
+    public void setItemOnCursor(org.bukkit.inventory.ItemStack param0) {
+        baseObject.setItemOnCursor(param0);
     }
 
     @Override
@@ -598,8 +618,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setGameMode( org.bukkit.GameMode param0 ) {
-        baseObject.setGameMode( param0 );
+    public void setGameMode(org.bukkit.GameMode param0) {
+        baseObject.setGameMode(param0);
     }
 
     @Override
@@ -608,53 +628,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public boolean isHandRaised() {
-        return false;
-    }
-
-    @Override
     public int getExpToLevel() {
         return baseObject.getExpToLevel();
-    }
-
-    @Override
-    public boolean discoverRecipe( NamespacedKey namespacedKey ) {
-        return false;
-    }
-
-    @Override
-    public int discoverRecipes( Collection<NamespacedKey> collection ) {
-        return 0;
-    }
-
-    @Override
-    public boolean undiscoverRecipe( NamespacedKey namespacedKey ) {
-        return false;
-    }
-
-    @Override
-    public int undiscoverRecipes( Collection<NamespacedKey> collection ) {
-        return 0;
-    }
-
-    @Override
-    public Entity getShoulderEntityLeft() {
-        return null;
-    }
-
-    @Override
-    public void setShoulderEntityLeft( Entity entity ) {
-
-    }
-
-    @Override
-    public Entity getShoulderEntityRight() {
-        return null;
-    }
-
-    @Override
-    public void setShoulderEntityRight( Entity entity ) {
-
     }
 
     @Override
@@ -663,8 +638,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public double getEyeHeight( boolean param0 ) {
-        return baseObject.getEyeHeight( param0 );
+    public double getEyeHeight(boolean param0) {
+        return baseObject.getEyeHeight(param0);
     }
 
     @Override
@@ -672,9 +647,21 @@ public class WebsendPlayerCommandSender implements Player {
         return baseObject.getEyeLocation();
     }
 
+    public java.util.List<org.bukkit.block.Block> getLineOfSight(java.util.HashSet<Material> param0, int param1) {
+        return baseObject.getLineOfSight(param0, param1);
+    }
+
+    public org.bukkit.block.Block getTargetBlock(java.util.HashSet<Material> param0, int param1) {
+        return baseObject.getTargetBlock(param0, param1);
+    }
+
+    public java.util.List<org.bukkit.block.Block> getLastTwoTargetBlocks(java.util.HashSet<Material> param0, int param1) {
+        return baseObject.getLastTwoTargetBlocks(param0, param1);
+    }
+
     @Override
-    public <T extends Projectile> T launchProjectile( Class<? extends T> param0 ) {
-        return baseObject.launchProjectile( param0 );
+    public <T extends Projectile> T launchProjectile(java.lang.Class<? extends T> param0) {
+        return baseObject.launchProjectile(param0);
     }
 
     @Override
@@ -683,8 +670,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setRemainingAir( int param0 ) {
-        baseObject.setRemainingAir( param0 );
+    public void setRemainingAir(int param0) {
+        baseObject.setRemainingAir(param0);
     }
 
     @Override
@@ -693,8 +680,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setMaximumAir( int param0 ) {
-        baseObject.setMaximumAir( param0 );
+    public void setMaximumAir(int param0) {
+        baseObject.setMaximumAir(param0);
     }
 
     @Override
@@ -703,8 +690,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setMaximumNoDamageTicks( int param0 ) {
-        baseObject.setMaximumNoDamageTicks( param0 );
+    public void setMaximumNoDamageTicks(int param0) {
+        baseObject.setMaximumNoDamageTicks(param0);
     }
 
     @Override
@@ -713,8 +700,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setLastDamage( double param0 ) {
-        baseObject.setLastDamage( param0 );
+    public void setLastDamage(double param0) {
+        baseObject.setLastDamage(param0);
     }
 
     @Override
@@ -723,8 +710,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setNoDamageTicks( int param0 ) {
-        baseObject.setNoDamageTicks( param0 );
+    public void setNoDamageTicks(int param0) {
+        baseObject.setNoDamageTicks(param0);
     }
 
     @Override
@@ -733,28 +720,28 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public boolean addPotionEffect( org.bukkit.potion.PotionEffect param0 ) {
-        return baseObject.addPotionEffect( param0 );
+    public boolean addPotionEffect(org.bukkit.potion.PotionEffect param0) {
+        return baseObject.addPotionEffect(param0);
     }
 
     @Override
-    public boolean addPotionEffect( org.bukkit.potion.PotionEffect param0, boolean param1 ) {
-        return baseObject.addPotionEffect( param0, param1 );
+    public boolean addPotionEffect(org.bukkit.potion.PotionEffect param0, boolean param1) {
+        return baseObject.addPotionEffect(param0, param1);
     }
 
     @Override
-    public boolean addPotionEffects( java.util.Collection<org.bukkit.potion.PotionEffect> param0 ) {
-        return baseObject.addPotionEffects( param0 );
+    public boolean addPotionEffects(java.util.Collection<org.bukkit.potion.PotionEffect> param0) {
+        return baseObject.addPotionEffects(param0);
     }
 
     @Override
-    public boolean hasPotionEffect( org.bukkit.potion.PotionEffectType param0 ) {
-        return baseObject.hasPotionEffect( param0 );
+    public boolean hasPotionEffect(org.bukkit.potion.PotionEffectType param0) {
+        return baseObject.hasPotionEffect(param0);
     }
 
     @Override
-    public void removePotionEffect( org.bukkit.potion.PotionEffectType param0 ) {
-        baseObject.removePotionEffect( param0 );
+    public void removePotionEffect(org.bukkit.potion.PotionEffectType param0) {
+        baseObject.removePotionEffect(param0);
     }
 
     @Override
@@ -763,8 +750,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public boolean hasLineOfSight( org.bukkit.entity.Entity param0 ) {
-        return baseObject.hasLineOfSight( param0 );
+    public boolean hasLineOfSight(org.bukkit.entity.Entity param0) {
+        return baseObject.hasLineOfSight(param0);
     }
 
     @Override
@@ -773,8 +760,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setRemoveWhenFarAway( boolean param0 ) {
-        baseObject.setRemoveWhenFarAway( param0 );
+    public void setRemoveWhenFarAway(boolean param0) {
+        baseObject.setRemoveWhenFarAway(param0);
     }
 
     @Override
@@ -783,33 +770,36 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
+    public void setCanPickupItems(boolean param0) {
+        baseObject.setCanPickupItems(param0);
+    }
+
+    @Override
     public boolean getCanPickupItems() {
         return baseObject.getCanPickupItems();
     }
 
-    @Override
-    public void setCanPickupItems( boolean param0 ) {
-        baseObject.setCanPickupItems( param0 );
+    //@Override
+    public void setCustomName(java.lang.String param0) {
+        baseObject.setDisplayName(param0);
+        //baseObject.setCustomName(param0);
+
+    }
+
+    //@Override
+    public java.lang.String getCustomName() {
+        //return baseObject.getCustomName();
+        return baseObject.getDisplayName();
     }
 
     @Override
-    public String getCustomName() {
-        return baseObject.getCustomName();
-    }
-
-    @Override
-    public void setCustomName( String param0 ) {
-        baseObject.setCustomName( param0 );
+    public void setCustomNameVisible(boolean param0) {
+        baseObject.setCustomNameVisible(param0);
     }
 
     @Override
     public boolean isCustomNameVisible() {
         return baseObject.isCustomNameVisible();
-    }
-
-    @Override
-    public void setCustomNameVisible( boolean param0 ) {
-        baseObject.setCustomNameVisible( param0 );
     }
 
     @Override
@@ -823,8 +813,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public boolean setLeashHolder( org.bukkit.entity.Entity param0 ) {
-        return baseObject.setLeashHolder( param0 );
+    public boolean setLeashHolder(org.bukkit.entity.Entity param0) {
+        return baseObject.setLeashHolder(param0);
     }
 
     @Override
@@ -833,8 +823,13 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public org.bukkit.Location getLocation( org.bukkit.Location param0 ) {
-        return baseObject.getLocation( param0 );
+    public org.bukkit.Location getLocation(org.bukkit.Location param0) {
+        return baseObject.getLocation(param0);
+    }
+
+    @Override
+    public void setVelocity(org.bukkit.util.Vector param0) {
+        baseObject.setVelocity(param0);
     }
 
     @Override
@@ -843,53 +838,33 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setVelocity( org.bukkit.util.Vector param0 ) {
-        baseObject.setVelocity( param0 );
-    }
-
-    @Override
-    public double getHeight() {
-        return baseObject.getHeight();
-    }
-
-    @Override
-    public double getWidth() {
-        return baseObject.getWidth();
-    }
-
-    @Override
-    public BoundingBox getBoundingBox() {
-        return baseObject.getBoundingBox();
-    }
-
-    @Override
     public org.bukkit.World getWorld() {
         return baseObject.getWorld();
     }
 
     @Override
-    public boolean teleport( org.bukkit.Location param0 ) {
-        return baseObject.teleport( param0 );
+    public boolean teleport(org.bukkit.Location param0) {
+        return baseObject.teleport(param0);
     }
 
     @Override
-    public boolean teleport( org.bukkit.Location param0, org.bukkit.event.player.PlayerTeleportEvent.TeleportCause param1 ) {
-        return baseObject.teleport( param0, param1 );
+    public boolean teleport(org.bukkit.Location param0, org.bukkit.event.player.PlayerTeleportEvent.TeleportCause param1) {
+        return baseObject.teleport(param0, param1);
     }
 
     @Override
-    public boolean teleport( org.bukkit.entity.Entity param0 ) {
-        return baseObject.teleport( param0 );
+    public boolean teleport(org.bukkit.entity.Entity param0) {
+        return baseObject.teleport(param0);
     }
 
     @Override
-    public boolean teleport( org.bukkit.entity.Entity param0, org.bukkit.event.player.PlayerTeleportEvent.TeleportCause param1 ) {
-        return baseObject.teleport( param0, param1 );
+    public boolean teleport(org.bukkit.entity.Entity param0, org.bukkit.event.player.PlayerTeleportEvent.TeleportCause param1) {
+        return baseObject.teleport(param0, param1);
     }
 
     @Override
-    public List<org.bukkit.entity.Entity> getNearbyEntities( double param0, double param1, double param2 ) {
-        return baseObject.getNearbyEntities( param0, param1, param2 );
+    public java.util.List<org.bukkit.entity.Entity> getNearbyEntities(double param0, double param1, double param2) {
+        return baseObject.getNearbyEntities(param0, param1, param2);
     }
 
     @Override
@@ -903,13 +878,13 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setFireTicks( int param0 ) {
-        baseObject.setFireTicks( param0 );
+    public int getMaxFireTicks() {
+        return baseObject.getMaxFireTicks();
     }
 
     @Override
-    public int getMaxFireTicks() {
-        return baseObject.getMaxFireTicks();
+    public void setFireTicks(int param0) {
+        baseObject.setFireTicks(param0);
     }
 
     @Override
@@ -933,38 +908,13 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public boolean isPersistent() {
-        return false;
-    }
-
-    @Override
-    public void setPersistent( boolean b ) {
-
-    }
-
-    @Override
     public org.bukkit.entity.Entity getPassenger() {
         return baseObject.getPassenger();
     }
 
     @Override
-    public boolean setPassenger( org.bukkit.entity.Entity param0 ) {
-        return baseObject.setPassenger( param0 );
-    }
-
-    @Override
-    public List<Entity> getPassengers() {
-        return null;
-    }
-
-    @Override
-    public boolean addPassenger( Entity entity ) {
-        return false;
-    }
-
-    @Override
-    public boolean removePassenger( Entity entity ) {
-        return false;
+    public boolean setPassenger(org.bukkit.entity.Entity param0) {
+        return baseObject.setPassenger(param0);
     }
 
     @Override
@@ -983,18 +933,18 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setFallDistance( float param0 ) {
-        baseObject.setFallDistance( param0 );
+    public void setFallDistance(float param0) {
+        baseObject.setFallDistance(param0);
+    }
+
+    @Override
+    public void setLastDamageCause(org.bukkit.event.entity.EntityDamageEvent param0) {
+        baseObject.setLastDamageCause(param0);
     }
 
     @Override
     public org.bukkit.event.entity.EntityDamageEvent getLastDamageCause() {
         return baseObject.getLastDamageCause();
-    }
-
-    @Override
-    public void setLastDamageCause( org.bukkit.event.entity.EntityDamageEvent param0 ) {
-        baseObject.setLastDamageCause( param0 );
     }
 
     @Override
@@ -1008,13 +958,13 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setTicksLived( int param0 ) {
-        baseObject.setTicksLived( param0 );
+    public void setTicksLived(int param0) {
+        baseObject.setTicksLived(param0);
     }
 
     @Override
-    public void playEffect( org.bukkit.EntityEffect param0 ) {
-        baseObject.playEffect( param0 );
+    public void playEffect(org.bukkit.EntityEffect param0) {
+        baseObject.playEffect(param0);
     }
 
     @Override
@@ -1038,33 +988,33 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setMetadata( String param0, org.bukkit.metadata.MetadataValue param1 ) {
-        baseObject.setMetadata( param0, param1 );
+    public void setMetadata(java.lang.String param0, org.bukkit.metadata.MetadataValue param1) {
+        baseObject.setMetadata(param0, param1);
     }
 
     @Override
-    public List<org.bukkit.metadata.MetadataValue> getMetadata( String param0 ) {
-        return baseObject.getMetadata( param0 );
+    public java.util.List<org.bukkit.metadata.MetadataValue> getMetadata(java.lang.String param0) {
+        return baseObject.getMetadata(param0);
     }
 
     @Override
-    public boolean hasMetadata( String param0 ) {
-        return baseObject.hasMetadata( param0 );
+    public boolean hasMetadata(java.lang.String param0) {
+        return baseObject.hasMetadata(param0);
     }
 
     @Override
-    public void removeMetadata( String param0, org.bukkit.plugin.Plugin param1 ) {
-        baseObject.removeMetadata( param0, param1 );
+    public void removeMetadata(java.lang.String param0, org.bukkit.plugin.Plugin param1) {
+        baseObject.removeMetadata(param0, param1);
     }
 
     @Override
-    public void damage( double param0 ) {
-        baseObject.damage( param0 );
+    public void damage(double param0) {
+        baseObject.damage(param0);
     }
 
     @Override
-    public void damage( double param0, org.bukkit.entity.Entity param1 ) {
-        baseObject.damage( param0, param1 );
+    public void damage(double param0, org.bukkit.entity.Entity param1) {
+        baseObject.damage(param0, param1);
     }
 
     @Override
@@ -1073,8 +1023,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setHealth( double param0 ) {
-        baseObject.setHealth( param0 );
+    public void setHealth(double param0) {
+        baseObject.setHealth(param0);
     }
 
     @Override
@@ -1082,9 +1032,10 @@ public class WebsendPlayerCommandSender implements Player {
         return baseObject.getMaxHealth();
     }
 
+
     @Override
-    public void setMaxHealth( double param0 ) {
-        baseObject.setMaxHealth( param0 );
+    public void setMaxHealth(double param0) {
+        baseObject.setMaxHealth(param0);
     }
 
     @Override
@@ -1093,48 +1044,48 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public boolean isPermissionSet( String param0 ) {
-        return baseObject.isPermissionSet( param0 );
+    public boolean isPermissionSet(java.lang.String param0) {
+        return baseObject.isPermissionSet(param0);
     }
 
     @Override
-    public boolean isPermissionSet( org.bukkit.permissions.Permission param0 ) {
-        return baseObject.isPermissionSet( param0 );
+    public boolean isPermissionSet(org.bukkit.permissions.Permission param0) {
+        return baseObject.isPermissionSet(param0);
     }
 
     @Override
-    public boolean hasPermission( String param0 ) {
-        return baseObject.hasPermission( param0 );
+    public boolean hasPermission(java.lang.String param0) {
+        return baseObject.hasPermission(param0);
     }
 
     @Override
-    public boolean hasPermission( org.bukkit.permissions.Permission param0 ) {
-        return baseObject.hasPermission( param0 );
+    public boolean hasPermission(org.bukkit.permissions.Permission param0) {
+        return baseObject.hasPermission(param0);
     }
 
     @Override
-    public org.bukkit.permissions.PermissionAttachment addAttachment( org.bukkit.plugin.Plugin param0, String param1, boolean param2 ) {
-        return baseObject.addAttachment( param0, param1, param2 );
+    public org.bukkit.permissions.PermissionAttachment addAttachment(org.bukkit.plugin.Plugin param0, java.lang.String param1, boolean param2) {
+        return baseObject.addAttachment(param0, param1, param2);
     }
 
     @Override
-    public org.bukkit.permissions.PermissionAttachment addAttachment( org.bukkit.plugin.Plugin param0 ) {
-        return baseObject.addAttachment( param0 );
+    public org.bukkit.permissions.PermissionAttachment addAttachment(org.bukkit.plugin.Plugin param0) {
+        return baseObject.addAttachment(param0);
     }
 
     @Override
-    public org.bukkit.permissions.PermissionAttachment addAttachment( org.bukkit.plugin.Plugin param0, String param1, boolean param2, int param3 ) {
-        return baseObject.addAttachment( param0, param1, param2, param3 );
+    public org.bukkit.permissions.PermissionAttachment addAttachment(org.bukkit.plugin.Plugin param0, java.lang.String param1, boolean param2, int param3) {
+        return baseObject.addAttachment(param0, param1, param2, param3);
     }
 
     @Override
-    public org.bukkit.permissions.PermissionAttachment addAttachment( org.bukkit.plugin.Plugin param0, int param1 ) {
-        return baseObject.addAttachment( param0, param1 );
+    public org.bukkit.permissions.PermissionAttachment addAttachment(org.bukkit.plugin.Plugin param0, int param1) {
+        return baseObject.addAttachment(param0, param1);
     }
 
     @Override
-    public void removeAttachment( org.bukkit.permissions.PermissionAttachment param0 ) {
-        baseObject.removeAttachment( param0 );
+    public void removeAttachment(org.bukkit.permissions.PermissionAttachment param0) {
+        baseObject.removeAttachment(param0);
     }
 
     @Override
@@ -1143,7 +1094,7 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public Set<org.bukkit.permissions.PermissionAttachmentInfo> getEffectivePermissions() {
+    public java.util.Set<org.bukkit.permissions.PermissionAttachmentInfo> getEffectivePermissions() {
         return baseObject.getEffectivePermissions();
     }
 
@@ -1153,8 +1104,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setOp( boolean param0 ) {
-        baseObject.setOp( param0 );
+    public void setOp(boolean param0) {
+        baseObject.setOp(param0);
     }
 
     @Override
@@ -1163,23 +1114,23 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void acceptConversationInput( String param0 ) {
-        baseObject.acceptConversationInput( param0 );
+    public void acceptConversationInput(java.lang.String param0) {
+        baseObject.acceptConversationInput(param0);
     }
 
     @Override
-    public boolean beginConversation( org.bukkit.conversations.Conversation param0 ) {
-        return baseObject.beginConversation( param0 );
+    public boolean beginConversation(org.bukkit.conversations.Conversation param0) {
+        return baseObject.beginConversation(param0);
     }
 
     @Override
-    public void abandonConversation( org.bukkit.conversations.Conversation param0 ) {
-        baseObject.abandonConversation( param0 );
+    public void abandonConversation(org.bukkit.conversations.Conversation param0) {
+        baseObject.abandonConversation(param0);
     }
 
     @Override
-    public void abandonConversation( org.bukkit.conversations.Conversation param0, org.bukkit.conversations.ConversationAbandonedEvent param1 ) {
-        baseObject.abandonConversation( param0, param1 );
+    public void abandonConversation(org.bukkit.conversations.Conversation param0, org.bukkit.conversations.ConversationAbandonedEvent param1) {
+        baseObject.abandonConversation(param0, param1);
     }
 
     @Override
@@ -1192,14 +1143,18 @@ public class WebsendPlayerCommandSender implements Player {
         return baseObject.isBanned();
     }
 
+    public void setBanned(boolean param0) {
+
+    }
+
     @Override
     public boolean isWhitelisted() {
         return baseObject.isWhitelisted();
     }
 
     @Override
-    public void setWhitelisted( boolean param0 ) {
-        baseObject.setWhitelisted( param0 );
+    public void setWhitelisted(boolean param0) {
+        baseObject.setWhitelisted(param0);
     }
 
     @Override
@@ -1223,326 +1178,348 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public java.util.Map<String, Object> serialize() {
+    public java.util.Map<java.lang.String, java.lang.Object> serialize() {
         return baseObject.serialize();
     }
 
     @Override
-    public void sendPluginMessage( org.bukkit.plugin.Plugin param0, String param1, byte[] param2 ) {
-        baseObject.sendPluginMessage( param0, param1, param2 );
+    public void sendPluginMessage(org.bukkit.plugin.Plugin param0, java.lang.String param1, byte[] param2) {
+        baseObject.sendPluginMessage(param0, param1, param2);
     }
 
     @Override
-    public Set<String> getListeningPluginChannels() {
+    public java.util.Set<java.lang.String> getListeningPluginChannels() {
         return baseObject.getListeningPluginChannels();
     }
 
-    public void setResourcePack( String arg0 ) {
-        baseObject.setResourcePack( arg0 );
+    @Override
+    public void setResourcePack(String arg0) {
+        baseObject.setResourcePack(arg0);
     }
 
     @Override
-    public void setResourcePack( String s, byte[] bytes ) {
-
+    public void decrementStatistic(Statistic statistic) throws IllegalArgumentException {
+        baseObject.decrementStatistic(statistic);
     }
 
-    public void removeAchievement( Achievement achievement ) {
-        baseObject.removeAchievement( achievement );
+    @Override
+    public void decrementStatistic(Statistic statistic, int amount) throws IllegalArgumentException {
+        baseObject.decrementStatistic(statistic, amount);
     }
 
-    public boolean hasAchievement( Achievement achievement ) {
-        return baseObject.hasAchievement( achievement );
+    @Override
+    public void setStatistic(Statistic statistic, int newValue) throws IllegalArgumentException {
+        baseObject.setStatistic(statistic, newValue);
     }
 
-    public void decrementStatistic( Statistic statistic ) throws IllegalArgumentException {
-        baseObject.decrementStatistic( statistic );
+    @Override
+    public int getStatistic(Statistic statistic) throws IllegalArgumentException {
+        return baseObject.getStatistic(statistic);
     }
 
-    public void decrementStatistic( Statistic statistic, int amount ) throws IllegalArgumentException {
-        baseObject.decrementStatistic( statistic, amount );
+    @Override
+    public void decrementStatistic(Statistic statistic, Material material) throws IllegalArgumentException {
+        baseObject.decrementStatistic(statistic, material);
     }
 
-    public void setStatistic( Statistic statistic, int newValue ) throws IllegalArgumentException {
-        baseObject.setStatistic( statistic, newValue );
+    @Override
+    public int getStatistic(Statistic statistic, Material material) throws IllegalArgumentException {
+        return baseObject.getStatistic(statistic, material);
     }
 
-    public int getStatistic( Statistic statistic ) throws IllegalArgumentException {
-        return baseObject.getStatistic( statistic );
+    @Override
+    public void decrementStatistic(Statistic statistic, Material material, int amount) throws IllegalArgumentException {
+        baseObject.decrementStatistic(statistic, material, amount);
     }
 
-    public void decrementStatistic( Statistic statistic, Material material ) throws IllegalArgumentException {
-        baseObject.decrementStatistic( statistic, material );
+    @Override
+    public void setStatistic(Statistic statistic, Material material, int newValue) throws IllegalArgumentException {
+        baseObject.setStatistic(statistic, material, newValue);
     }
 
-    public int getStatistic( Statistic statistic, Material material ) throws IllegalArgumentException {
-        return baseObject.getStatistic( statistic, material );
+    @Override
+    public void incrementStatistic(Statistic statistic, EntityType entityType) throws IllegalArgumentException {
+        baseObject.incrementStatistic(statistic, entityType);
     }
 
-    public void decrementStatistic( Statistic statistic, Material material, int amount ) throws IllegalArgumentException {
-        baseObject.decrementStatistic( statistic, material, amount );
+    @Override
+    public void decrementStatistic(Statistic statistic, EntityType entityType) throws IllegalArgumentException {
+        baseObject.decrementStatistic(statistic, entityType);
     }
 
-    public void setStatistic( Statistic statistic, Material material, int newValue ) throws IllegalArgumentException {
-        baseObject.setStatistic( statistic, material, newValue );
+    @Override
+    public int getStatistic(Statistic statistic, EntityType entityType) throws IllegalArgumentException {
+        return baseObject.getStatistic(statistic, entityType);
     }
 
-    public void incrementStatistic( Statistic statistic, EntityType entityType ) throws IllegalArgumentException {
-        baseObject.incrementStatistic( statistic, entityType );
+    @Override
+    public void incrementStatistic(Statistic statistic, EntityType entityType, int amount) throws IllegalArgumentException {
+        baseObject.incrementStatistic(statistic, entityType, amount);
     }
 
-    public void decrementStatistic( Statistic statistic, EntityType entityType ) throws IllegalArgumentException {
-        baseObject.decrementStatistic( statistic, entityType );
+    @Override
+    public void decrementStatistic(Statistic statistic, EntityType entityType, int amount) {
+        baseObject.decrementStatistic(statistic, entityType, amount);
     }
 
-    public int getStatistic( Statistic statistic, EntityType entityType ) throws IllegalArgumentException {
-        return baseObject.getStatistic( statistic, entityType );
+    @Override
+    public void setStatistic(Statistic statistic, EntityType entityType, int newValue) {
+        baseObject.setStatistic(statistic, entityType, newValue);
     }
 
-    public void incrementStatistic( Statistic statistic, EntityType entityType, int amount ) throws IllegalArgumentException {
-        baseObject.incrementStatistic( statistic, entityType, amount );
+    @Override
+    public <T extends Projectile> T launchProjectile(Class<? extends T> projectile, Vector velocity) {
+        return baseObject.launchProjectile(projectile, velocity);
     }
 
-    public void decrementStatistic( Statistic statistic, EntityType entityType, int amount ) {
-        baseObject.decrementStatistic( statistic, entityType, amount );
+    @Override
+    public void sendSignChange(Location lctn, String[] strings) throws IllegalArgumentException {
+        baseObject.sendSignChange(lctn, strings);
     }
 
-    public void setStatistic( Statistic statistic, EntityType entityType, int newValue ) {
-        baseObject.setStatistic( statistic, entityType, newValue );
-    }
-
-    public <T extends Projectile> T launchProjectile( Class<? extends T> projectile, Vector velocity ) {
-        return baseObject.launchProjectile( projectile, velocity );
-    }
-
-    public void sendSignChange( Location lctn, String[] strings ) throws IllegalArgumentException {
-        baseObject.sendSignChange( lctn, strings );
-    }
-
+    @Override
     public Entity getSpectatorTarget() {
         return baseObject.getSpectatorTarget();
     }
 
-    public void setSpectatorTarget( Entity entity ) {
-        baseObject.setSpectatorTarget( entity );
-    }
-
-    public void sendTitle( String string, String string1 ) {
-        baseObject.sendTitle( string, string1 );
+    @Override
+    public void setSpectatorTarget(Entity entity) {
+        baseObject.setSpectatorTarget(entity);
     }
 
     @Override
-    public void sendTitle( String s, String s1, int i, int i1, int i2 ) {
-
+    public void sendTitle(String string, String string1) {
+        baseObject.sendTitle(string, string1);
     }
 
+    @Override
     public void resetTitle() {
         baseObject.resetTitle();
     }
 
-    public void spawnParticle( Particle prtcl, Location lctn, int i ) {
-        baseObject.spawnParticle( prtcl, lctn, i );
-    }
-
-    public void spawnParticle( Particle prtcl, double d, double d1, double d2, int i ) {
-        baseObject.spawnParticle( prtcl, d, d1, d2, i );
-    }
-
-    public <T> void spawnParticle( Particle prtcl, Location lctn, int i, T t ) {
-        baseObject.spawnParticle( prtcl, lctn, i, t );
-    }
-
-    public <T> void spawnParticle( Particle prtcl, double d, double d1, double d2, int i, T t ) {
-        baseObject.spawnParticle( prtcl, d, d1, d2, i, t );
-    }
-
-    public void spawnParticle( Particle prtcl, Location lctn, int i, double d, double d1, double d2 ) {
-        baseObject.spawnParticle( prtcl, lctn, i, d, d1, d2 );
-    }
-
-    public void spawnParticle( Particle prtcl, double d, double d1, double d2, int i, double d3, double d4, double d5 ) {
-        baseObject.spawnParticle( prtcl, d, d1, d2, i, d3, d4, d5 );
-    }
-
-    public <T> void spawnParticle( Particle prtcl, Location lctn, int i, double d, double d1, double d2, T t ) {
-        baseObject.spawnParticle( prtcl, lctn, i, d, d1, d2, t );
-    }
-
-    public <T> void spawnParticle( Particle prtcl, double d, double d1, double d2, int i, double d3, double d4, double d5, T t ) {
-        baseObject.spawnParticle( prtcl, d, d1, d2, i, d3, d4, d5, t );
-    }
-
-    public void spawnParticle( Particle prtcl, Location lctn, int i, double d, double d1, double d2, double d3 ) {
-        baseObject.spawnParticle( prtcl, lctn, i, d, d1, d2, d3 );
-    }
-
-    public void spawnParticle( Particle prtcl, double d, double d1, double d2, int i, double d3, double d4, double d5, double d6 ) {
-        baseObject.spawnParticle( prtcl, d, d1, d2, i, d3, d4, d5, d6 );
-    }
-
-    public <T> void spawnParticle( Particle prtcl, Location lctn, int i, double d, double d1, double d2, double d3, T t ) {
-        baseObject.spawnParticle( prtcl, lctn, i, d, d1, d2, d3, t );
-    }
-
-    public <T> void spawnParticle( Particle prtcl, double d, double d1, double d2, int i, double d3, double d4, double d5, double d6, T t ) {
-        baseObject.spawnParticle( prtcl, d, d1, d2, i, d3, d4, d5, d6, t );
+    @Override
+    public void spawnParticle(Particle prtcl, Location lctn, int i) {
+        baseObject.spawnParticle(prtcl, lctn, i);
     }
 
     @Override
-    public AdvancementProgress getAdvancementProgress( Advancement advancement ) {
-        return baseObject.getAdvancementProgress( advancement );
+    public void spawnParticle(Particle prtcl, double d, double d1, double d2, int i) {
+        baseObject.spawnParticle(prtcl, d, d1, d2, i);
     }
 
     @Override
-    public String getLocale() {
-        return baseObject.getLocale();
+    public <T> void spawnParticle(Particle prtcl, Location lctn, int i, T t) {
+        baseObject.spawnParticle(prtcl, lctn, i, t);
     }
 
     @Override
-    public void updateCommands() {
-        baseObject.updateCommands();
+    public <T> void spawnParticle(Particle prtcl, double d, double d1, double d2, int i, T t) {
+        baseObject.spawnParticle(prtcl, d, d1, d2, i, t);
     }
 
     @Override
-    public Spigot spigot() {
-        return baseObject.spigot();
-    }
-
-    public InventoryView openMerchant( Villager vlgr, boolean bln ) {
-        return baseObject.openMerchant( vlgr, bln );
+    public void spawnParticle(Particle prtcl, Location lctn, int i, double d, double d1, double d2) {
+        baseObject.spawnParticle(prtcl, lctn, i, d, d1, d2);
     }
 
     @Override
-    public InventoryView openMerchant( Merchant merchant, boolean b ) {
-        return baseObject.openMerchant( merchant, b );
-    }
-
-    public List<Block> getLineOfSight( Set<Material> set, int i ) {
-        return baseObject.getLineOfSight( set, i );
-    }
-
-    public Block getTargetBlock( Set<Material> set, int i ) {
-        return baseObject.getTargetBlock( set, i );
-    }
-
-    public List<Block> getLastTwoTargetBlocks( Set<Material> set, int i ) {
-        return baseObject.getLastTwoTargetBlocks( set, i );
+    public void spawnParticle(Particle prtcl, double d, double d1, double d2, int i, double d3, double d4, double d5) {
+        baseObject.spawnParticle(prtcl, d, d1, d2, i, d3, d4, d5);
     }
 
     @Override
-    public Block getTargetBlockExact( int i ) {
-        return baseObject.getTargetBlockExact( i );
+    public <T> void spawnParticle(Particle prtcl, Location lctn, int i, double d, double d1, double d2, T t) {
+        baseObject.spawnParticle(prtcl, lctn, i, d, d1, d2, t);
     }
 
     @Override
-    public Block getTargetBlockExact( int i, FluidCollisionMode fluidCollisionMode ) {
-        return baseObject.getTargetBlockExact( i, fluidCollisionMode );
+    public <T> void spawnParticle(Particle prtcl, double d, double d1, double d2, int i, double d3, double d4, double d5, T t) {
+        baseObject.spawnParticle(prtcl, d, d1, d2, i, d3, d4, d5, t);
     }
 
     @Override
-    public RayTraceResult rayTraceBlocks( double v ) {
-        return baseObject.rayTraceBlocks( v );
+    public void spawnParticle(Particle prtcl, Location lctn, int i, double d, double d1, double d2, double d3) {
+        baseObject.spawnParticle(prtcl, lctn, i, d, d1, d2, d3);
     }
 
     @Override
-    public RayTraceResult rayTraceBlocks( double v, FluidCollisionMode fluidCollisionMode ) {
-        return baseObject.rayTraceBlocks( v, fluidCollisionMode );
+    public void spawnParticle(Particle prtcl, double d, double d1, double d2, int i, double d3, double d4, double d5, double d6) {
+        baseObject.spawnParticle(prtcl, d, d1, d2, i, d3, d4, d5, d6);
     }
 
-    public AttributeInstance getAttribute( Attribute atrbt ) {
-        return baseObject.getAttribute( atrbt );
+    @Override
+    public <T> void spawnParticle(Particle prtcl, Location lctn, int i, double d, double d1, double d2, double d3, T t) {
+        baseObject.spawnParticle(prtcl, lctn, i, d, d1, d2, d3, t);
     }
 
+    @Override
+    public <T> void spawnParticle(Particle prtcl, double d, double d1, double d2, int i, double d3, double d4, double d5, double d6, T t) {
+        baseObject.spawnParticle(prtcl, d, d1, d2, i, d3, d4, d5, d6, t);
+    }
+
+    @Override
+    public InventoryView openMerchant(Villager vlgr, boolean bln) {
+        return baseObject.openMerchant(vlgr, bln);
+    }
+
+    @Override
+    public List<Block> getLineOfSight(Set<Material> set, int i) {
+        return baseObject.getLineOfSight(set, i);
+    }
+
+    @Override
+    public Block getTargetBlock(Set<Material> set, int i) {
+        return baseObject.getTargetBlock(set, i);
+    }
+
+    @Override
+    public List<Block> getLastTwoTargetBlocks(Set<Material> set, int i) {
+        return baseObject.getLastTwoTargetBlocks(set, i);
+    }
+
+    @Override
+    public AttributeInstance getAttribute(Attribute atrbt) {
+        return baseObject.getAttribute(atrbt);
+    }
+
+    @Override
+    public void setGlowing(boolean bln) {
+        baseObject.setGlowing(bln);
+    }
+
+    @Override
     public boolean isGlowing() {
         return baseObject.isGlowing();
     }
 
-    public void setGlowing( boolean bln ) {
-        baseObject.setGlowing( bln );
-    }
-
+    @Override
     public MainHand getMainHand() {
         return baseObject.getMainHand();
     }
 
+    @Override
     public boolean isGliding() {
         return baseObject.isGliding();
     }
 
-    public void setGliding( boolean bln ) {
-        baseObject.setGliding( bln );
+    @Override
+    public void setGliding(boolean bln) {
+        baseObject.setGliding(bln);
     }
 
     @Override
-    public boolean isSwimming() {
-        return baseObject.isSwimming();
+    public void setAI(boolean bln) {
+        baseObject.setAI(bln);
     }
 
     @Override
-    public void setSwimming( boolean b ) {
-        baseObject.setSwimming( b );
-    }
-
-    @Override
-    public boolean isRiptiding() {
-        return baseObject.isRiptiding();
-    }
-
-    public void setAI( boolean bln ) {
-        baseObject.setAI( bln );
-    }
-
     public boolean hasAI() {
         return baseObject.hasAI();
     }
 
+    @Override
+    public void setCollidable(boolean bln) {
+        baseObject.setCollidable(bln);
+    }
+
+    @Override
     public boolean isCollidable() {
         return baseObject.isCollidable();
     }
 
-    public void setCollidable( boolean bln ) {
-        baseObject.setCollidable( bln );
+    @Override
+    public void setInvulnerable(boolean bln) {
+        baseObject.setInvulnerable(bln);
     }
 
+    @Override
     public boolean isInvulnerable() {
         return baseObject.isInvulnerable();
     }
 
-    public void setInvulnerable( boolean bln ) {
-        baseObject.setInvulnerable( bln );
-    }
-
-    public void stopSound( Sound sound ) {
-        baseObject.stopSound( sound );
-    }
-
-    public void stopSound( String string ) {
-        baseObject.stopSound( string );
+    @Override
+    public void stopSound(Sound sound) {
+        baseObject.stopSound(sound);
     }
 
     @Override
-    public void stopSound( Sound sound, SoundCategory soundCategory ) {
-        baseObject.stopSound( sound, soundCategory );
+    public void stopSound(String string) {
+        baseObject.stopSound(string);
     }
 
     @Override
-    public void stopSound( String s, SoundCategory soundCategory ) {
-        baseObject.stopSound( s, soundCategory );
-    }
-
     public boolean isSilent() {
         return baseObject.isSilent();
     }
 
-    public void setSilent( boolean bln ) {
-        baseObject.setSilent( bln );
+    @Override
+    public void setSilent(boolean bln) {
+        baseObject.setSilent(bln);
     }
 
+    @Override
     public boolean hasGravity() {
         return baseObject.hasGravity();
     }
 
-    public void setGravity( boolean bln ) {
-        baseObject.setGravity( bln );
+    @Override
+    public void setGravity(boolean bln) {
+        baseObject.setGravity(bln);
+    }
+
+    @Override
+    public PotionEffect getPotionEffect(PotionEffectType pet) {
+        return baseObject.getPotionEffect(pet);
+    }
+
+    @Override
+    public void playSound(Location arg0, Sound arg1, SoundCategory arg2, float arg3, float arg4) {
+        baseObject.playSound(arg0, arg1, arg4, arg4);
+    }
+
+    @Override
+    public void playSound(Location arg0, String arg1, SoundCategory arg2, float arg3, float arg4) {
+        baseObject.playSound(arg0, arg1, arg4, arg4);
+    }
+
+    @Override
+    public void stopSound(Sound arg0, SoundCategory arg1) {
+        baseObject.stopSound(arg0, arg1);
+    }
+
+    @Override
+    public void stopSound(String arg0, SoundCategory arg1) {
+        baseObject.stopSound(arg0, arg1);
+    }
+
+    @Override
+    public void sendTitle(String arg0, String arg1, int arg2, int arg3, int arg4) {
+        baseObject.sendTitle(arg0, arg1, arg2, arg3, arg4);
+    }
+
+    @Override
+    public InventoryView openMerchant(Merchant arg0, boolean arg1) {
+        return baseObject.openMerchant(arg0, arg1);
+    }
+
+    @Override
+    public boolean isHandRaised() {
+        return baseObject.isHandRaised();
+    }
+
+    @Override
+    public List<Entity> getPassengers() {
+        return baseObject.getPassengers();
+    }
+
+    @Override
+    public boolean addPassenger(Entity arg0) {
+        return baseObject.addPassenger(arg0);
+    }
+
+    @Override
+    public boolean removePassenger(Entity arg0) {
+        return baseObject.removePassenger(arg0);
     }
 
     @Override
@@ -1551,8 +1528,8 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public void setPortalCooldown( int i ) {
-        baseObject.setPortalCooldown( i );
+    public void setPortalCooldown(int cooldown) {
+        baseObject.setPortalCooldown(cooldown);
     }
 
     @Override
@@ -1561,26 +1538,138 @@ public class WebsendPlayerCommandSender implements Player {
     }
 
     @Override
-    public boolean addScoreboardTag( String s ) {
-        return baseObject.addScoreboardTag( s );
+    public boolean addScoreboardTag(String tag) {
+        return baseObject.addScoreboardTag(tag);
     }
 
     @Override
-    public boolean removeScoreboardTag( String s ) {
-        return baseObject.removeScoreboardTag( s );
+    public boolean removeScoreboardTag(String tag) {
+        return baseObject.removeScoreboardTag(tag);
+    }
+
+    @Override
+    public void setResourcePack(String string, byte[] bytes) {
+        baseObject.setResourcePack(string, bytes);
+    }
+
+
+    @Override
+    public boolean hasCooldown(Material mtrl) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int getCooldown(Material mtrl) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setCooldown(Material mtrl, int i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean discoverRecipe(NamespacedKey nk) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int discoverRecipes(Collection<NamespacedKey> clctn) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean undiscoverRecipe(NamespacedKey nk) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Block getTargetBlockExact(int i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Block getTargetBlockExact(int i, FluidCollisionMode fcm) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public RayTraceResult rayTraceBlocks(double d) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public RayTraceResult rayTraceBlocks(double d, FluidCollisionMode fcm) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isSwimming() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setSwimming(boolean bln) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isRiptiding() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public double getHeight() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public double getWidth() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public BoundingBox getBoundingBox() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isPersistent() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setPersistent(boolean bln) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public PistonMoveReaction getPistonMoveReaction() {
-        return baseObject.getPistonMoveReaction();
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public BlockFace getFacing() {
-        return baseObject.getFacing();
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public PotionEffect getPotionEffect( PotionEffectType pet ) {
-        return baseObject.getPotionEffect( pet );
+    @Override
+    public int getClientViewDistance() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean sleep(Location lctn, boolean bln) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void wakeup(boolean bln) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Location getBedLocation() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
