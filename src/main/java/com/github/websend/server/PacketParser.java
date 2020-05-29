@@ -21,6 +21,7 @@ import java.util.concurrent.ExecutionException;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Pose;
 import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.inventory.ItemStack;
@@ -66,7 +67,7 @@ public class PacketParser {
                     success = Main.getBukkitServer().getScheduler().callSyncMethod(Main.getInstance(), new Callable<Boolean>() {
                         @Override
                         public Boolean call() {
-                            
+
                             return Bukkit.dispatchCommand(new WebsendPlayerCommandSender(player, targetPlugin) {
                                 @Override
                                 public void sendSignChange(Location lctn, String[] strings, DyeColor dc) throws IllegalArgumentException {
@@ -110,6 +111,41 @@ public class PacketParser {
 
                                 @Override
                                 public void setAbsorptionAmount(double d) {
+                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                }
+
+                                @Override
+                                public void sendExperienceChange(float f) {
+                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                }
+
+                                @Override
+                                public void sendExperienceChange(float f, int i) {
+                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                }
+
+                                @Override
+                                public Player.Spigot spigot() {
+                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                }
+
+                                @Override
+                                public float getAttackCooldown() {
+                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                }
+
+                                @Override
+                                public void attack(Entity entity) {
+                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                }
+
+                                @Override
+                                public void swingMainHand() {
+                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                }
+
+                                @Override
+                                public void swingOffHand() {
                                     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                                 }
 

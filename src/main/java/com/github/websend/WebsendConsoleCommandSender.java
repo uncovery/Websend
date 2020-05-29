@@ -146,4 +146,9 @@ public class WebsendConsoleCommandSender implements ConsoleCommandSender {
     public void abandonConversation(Conversation c, ConversationAbandonedEvent cae) {
         parent.abandonConversation(c, cae);
     }
+
+    @Override
+    public Spigot spigot() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
