@@ -3,8 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.websend</groupId>
     <artifactId>Websend</artifactId>
-    <version>4.2</version>
+    <version>4.5</version>
     <packaging>jar</packaging>
+    <repositories>
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
     <dependencies>
         <dependency>
             <groupId>commons-logging</groupId>
@@ -37,23 +43,22 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.15.2-SNAPSHOT</version>
-            <scope>system</scope>
-			<systemPath>${basedir}/lib/spigot-api-1.15.2-R0.1-SNAPSHOT.jar</systemPath>
+            <version>1.16.3-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.1</version>
+            <scope>test</scope>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.15.2-SNAPSHOT</version>
+            <version>1.16.3-SNAPSHOT</version>
             <scope>system</scope>
-			<systemPath>${basedir}/lib/spigot-1.15.2-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>		
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-            <type>jar</type>
+            <systemPath>${basedir}/lib/spigot-1.16.3-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
     </dependencies>
     <properties>
