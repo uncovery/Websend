@@ -3,13 +3,12 @@ package com.github.websend;
 import com.github.websend.spigot.SpigotJSONSerializer;
 import com.google.gson.Gson;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.minecraft.server.v1_15_R1.MojangsonParser;
-import net.minecraft.server.v1_15_R1.NBTTagCompound;
+import net.minecraft.server.v1_16_R2.MojangsonParser;
+import net.minecraft.server.v1_16_R2.NBTTagCompound;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -69,8 +68,7 @@ public abstract class JSONSerializer {
     }
 
     public JSONArray serializeInventory(Inventory inv) throws JSONException {
-        JSONArray inventory = new JSONArray();
-        {
+        JSONArray inventory = new JSONArray(); {
             for (int i = 0; i < inv.getSize(); i++) {
                 ItemStack itemStack = inv.getItem(i);
                 if (itemStack != null) {
@@ -81,15 +79,16 @@ public abstract class JSONSerializer {
                     item.put("Amount", itemStack.getAmount());
 
                     if (itemStack.hasItemMeta()) {
-                        Map newStack = itemStack.getItemMeta().serialize();
-
-                        net.minecraft.server.v1_15_R1.ItemStack CBStack = CraftItemStack.asNMSCopy(itemStack);
+                        // method to get nbt json from the legacy minecraft code
+                        net.minecraft.server.v1_16_R2.ItemStack CBStack = CraftItemStack.asNMSCopy(itemStack);
                         NBTTagCompound itemTag = CBStack.getTag();
 
                         Gson gson = new Gson();
                         String json = gson.toJson(itemTag);
                         item.put("nbt_json", json);
 
+                        // method to get nbt_raw without converting it to json
+                        // this is the current default instead of using the JSON above
                         String tagString = itemTag.toString();
 
                         try {
@@ -98,6 +97,12 @@ public abstract class JSONSerializer {
                         } catch (CommandSyntaxException ex) {
                             Logger.getLogger(JSONSerializer.class.getName()).log(Level.SEVERE, null, ex);
                         }
+
+                        // method to get nbt from the spigo API instead of the legacy minecraft code
+                        // the issue here is that enchantments have the wrong name, e.g. "SWEEPING_EDGE" instead of "minecraft:sweeping"
+                        Gson gson2 = new Gson();
+                        String json2 = gson2.toJson(itemStack.getItemMeta().serialize());
+                        item.put("nbt_json_api", json2);
                     }
 
                     inventory.put(item);
