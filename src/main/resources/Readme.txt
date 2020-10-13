@@ -1,1 +1,1 @@
-Go to https://dl.dropboxusercontent.com/u/35774053/Websend/docs/index.html for documentation on installation and usage of this plugin.
+Go to https://github.com/Wouterdek/Websend/wiki for documentation on installation and usage of this plugin.
