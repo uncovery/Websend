@@ -10,6 +10,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.UUID;
 import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
@@ -21,7 +23,9 @@ import java.util.concurrent.ExecutionException;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityCategory;
 import org.bukkit.entity.Pose;
 import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.inventory.ItemStack;
@@ -146,6 +150,61 @@ public class PacketParser {
 
                                 @Override
                                 public void swingOffHand() {
+                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                }
+
+                                @Override
+                                public boolean hasDiscoveredRecipe(NamespacedKey nk) {
+                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                }
+
+                                @Override
+                                public Set<NamespacedKey> getDiscoveredRecipes() {
+                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                }
+
+                                @Override
+                                public boolean dropItem(boolean bln) {
+                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                }
+
+                                @Override
+                                public Set<UUID> getCollidableExemptions() {
+                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                }
+
+                                @Override
+                                public int getArrowCooldown() {
+                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                }
+
+                                @Override
+                                public void setArrowCooldown(int i) {
+                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                }
+
+                                @Override
+                                public int getArrowsInBody() {
+                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                }
+
+                                @Override
+                                public void setArrowsInBody(int i) {
+                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                }
+
+                                @Override
+                                public EntityCategory getCategory() {
+                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                }
+
+                                @Override
+                                public void setInvisible(boolean bln) {
+                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                }
+
+                                @Override
+                                public boolean isInvisible() {
                                     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                                 }
 
