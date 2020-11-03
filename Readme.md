@@ -30,8 +30,56 @@ Note that a server restart is required to apply the changes to the configuration
 
 # Bukkit to PHP 
 
-This allows you to execute PHP scripts by typing in-game commands.
+This allows you to execute PHP scripts by typing in-game commands. Websend creates a HTTP POST request to a URL you give and parses the response given by PHP.
 
 ## Configuration
+
+* Open the “minecraft.php” file included in the Websend download.
+* Set the password variable to the password specified in the Websend configuration file.
+* Upload this file to your website.
+* Open the Websend plugin configuration file.
+* Set the "URL=" option to the url of your php file.
+* Start your Bukkit server.
+* Try command “/ws example”
+
+## Data sent by websend
+
+When Websend sends its request it includes information in the POST data.  Most of the data is contained in a JSON string under `$_POST['jsonData']`, unless `GZIP_REQUESTS` is enabled, in which case it is available in gzip form under `$_FILES['jsonData']`. Whether the JSON data is compressed or not is specified under the `$_POST['isCompressed']` variable. The `$_POST['authKey']` variable contains the hashed password and the `$_POST['args'][]` has the arguments.
+
+## Sending a reply
+
+You can repond to the request by simply printing commands with print() or echo. Websend will then parse and execute these commands in the order that they were printed. Each command is seperated by a semi-colon (;).
+
+## Output
+
+* PrintToConsole :Text;
+  Print text to console.
+  Ex: PrintToConsole_: Message from Websend;
+* PrintToPlayer [-playername]:Text;
+    Prints to text to a player currently playing on your server.
+    By using "-playername", you can specify the player to send the message to, otherwise the message will be sent to the player that started the websend request.
+    Ex: PrintToPlayer: Message from Websend;
+    Ex: PrintToPlayer-notch: Message from Websend;
+    Broadcast :Text;
+    Broadcast a message to all players currently playing on the server.
+    Ex: Broadcast: Message from Websend;
+
+## Commands
+
+
+    ExecutePlayerCommand [-playername]:command arguments;
+    Executes a command as a player currently playing on your server.
+    By using "-playername", you can specify the player to set as command source, otherwise the command will be ran as the player that started the websend request.
+    Ex: ExecutePlayerCommand: time set 0;
+    Ex: ExecutePlayerCommand-notch: time set 0;
+    ExecuteConsoleCommand :command arguments;
+    Prints to text to a player currently playing on your server.
+    By using "-playername", you can specify the player to send the message to, otherwise the message will be sent to the player that started the websend request.
+    Ex: ExecuteConsoleCommand: time set 0;
+    ExecuteScript :scriptname;
+    Runs a script. The script has to be in the Websend scripts directory and has to be compiled and loaded before this is runned.
+    Ex: ExecuteScript: time set 0;
+
+
 
 Use the command `/ws argument0 argument1` or `/websend argument0 argument1` to start a request from Spigot to PHP. 
