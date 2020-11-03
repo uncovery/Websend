@@ -5,10 +5,10 @@ import com.google.gson.Gson;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.minecraft.server.v1_16_R2.MojangsonParser;
-import net.minecraft.server.v1_16_R2.NBTTagCompound;
+import net.minecraft.server.v1_16_R3.MojangsonParser;
+import net.minecraft.server.v1_16_R3.NBTTagCompound;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -80,7 +80,7 @@ public abstract class JSONSerializer {
 
                     if (itemStack.hasItemMeta()) {
                         // method to get nbt json from the legacy minecraft code
-                        net.minecraft.server.v1_16_R2.ItemStack CBStack = CraftItemStack.asNMSCopy(itemStack);
+                        net.minecraft.server.v1_16_R3.ItemStack CBStack = CraftItemStack.asNMSCopy(itemStack);
                         NBTTagCompound itemTag = CBStack.getTag();
 
                         Gson gson = new Gson();

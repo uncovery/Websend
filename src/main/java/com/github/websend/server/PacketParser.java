@@ -208,6 +208,21 @@ public class PacketParser {
                                     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                                 }
 
+                                @Override
+                                public void sendMessage(UUID uuid, String string) {
+                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                }
+
+                                @Override
+                                public void sendMessage(UUID uuid, String[] strings) {
+                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                }
+
+                                @Override
+                                public void sendRawMessage(UUID uuid, String string) {
+                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                }
+
                             }, command);
                         }
                     }).get();

@@ -1,6 +1,7 @@
 package com.github.websend;
 
 import java.util.Set;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import org.bukkit.Server;
@@ -149,6 +150,21 @@ public class WebsendConsoleCommandSender implements ConsoleCommandSender {
 
     @Override
     public Spigot spigot() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void sendMessage(UUID uuid, String string) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void sendMessage(UUID uuid, String[] strings) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void sendRawMessage(UUID uuid, String string) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
