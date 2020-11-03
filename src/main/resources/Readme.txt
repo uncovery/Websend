@@ -1,1 +1,1 @@
-Go to https://github.com/Wouterdek/Websend/wiki for documentation on installation and usage of this plugin.
+Go to https://github.com/uncovery/Websend for documentation on installation and usage of this plugin.
