@@ -73,18 +73,15 @@ These commands can be sent back to spigot in order to execute something on the s
 That for exampple would send an in-game message to the player "playername".
 Here are all the commands:
 
-* `ExecutePlayerCommand [-playername]:command arguments;` Executes a command as a player currently playing on your server. By using "-playername", you can specify the player to set as command source, otherwise the command will be ran as the player that started the websend request. This allows you to 'force' a user to execute a command.
-  Ex: `ExecutePlayerCommand: time set 0;`
-  Ex: `ExecutePlayerCommand-notch: time set 0;`
-  
-  
-ExecuteConsoleCommand :command arguments;
-Prints to text to a player currently playing on your server.
-By using "-playername", you can specify the player to send the message to, otherwise the message will be sent to the player that started the websend request.
-Ex: ExecuteConsoleCommand: time set 0;
-ExecuteScript :scriptname;
-Runs a script. The script has to be in the Websend scripts directory and has to be compiled and loaded before this is runned.
-Ex: ExecuteScript: time set 0;
+*   `ExecutePlayerCommand [-playername]:command arguments;` 
+    Executes a command as a player currently playing on your server. By using "-playername", you can specify the player to set as command source, otherwise the command will be ran as the player that started the websend request. This allows you to 'force' a user to execute a command.
+    Examples: `ExecutePlayerCommand: time set 0;`, `ExecutePlayerCommand-notch: time set 0;`
+*   `ExecuteConsoleCommand :command arguments;`
+    Prints to text to a player currently playing on your server.
+    Example: `ExecuteConsoleCommand: time set 0;`
+*   `ExecuteScript :scriptname;`
+    Runs a script. The script has to be in the Websend scripts directory and has to be compiled and loaded before this is runned.
+    Example: `ExecuteScript: scriptname;`
 
 
 
