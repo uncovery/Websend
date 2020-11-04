@@ -29,7 +29,7 @@ WRAP_COMMAND_EXECUTOR=true/false | If true, Websend will use additional methods 
 
 Note that a server restart is required to apply the changes to the configuration files.
 
-# Bukkit to PHP 
+# Spigot to PHP 
 
 This allows you to execute PHP scripts by typing in-game commands. Websend creates a HTTP POST request to a URL you give and parses the response given by PHP.
 
@@ -56,39 +56,63 @@ When Websend sends its request it includes information in the POST data.  Most o
 You can respond to the request by simply printing commands with print() or echo. Websend will then parse and execute these commands in the order that they were printed. Each command is separated by a semi-colon (;).
 You can either reply with a simple text or even execute commands in-game:
 
-###  Text replies
 These replies can be sent in the format of
 
     print("/Output/PrintToConsole:Hello there!;");
     
 Here is a complete list. Don't forget to prefix them with `/Output/ `:
 
-*   `PrintToConsole:Text;`: Prints "Text" to console. In-game players won't see this.
-*   `PrintToPlayer[-playername]:Text;`: Prints to text to a player currently playing on your server.
+*   `/Output/PrintToConsole:Text;`: Prints "Text" to console. In-game players won't see this.
+*   `/Output/PrintToPlayer[-playername]:Text;`: Prints to text to a player currently playing on your server.
     By using "-playername", you can specify the player to send the message to, otherwise the message will be sent to the player that started the websend request.
-    Examples: `PrintToPlayer:Message from Websend;` or `Ex: PrintToPlayer-notch:Message from Websend;`
-*    `Broadcast:Text;`: Broadcast a message to all players currently playing on the server.
-    Example: `Broadcast:Message from Websend;`
-
-### Commands
-
-These commands can be sent back to spigot in order to execute something on the server. This happens in the format of
-
-    print("/Command/ExecuteConsoleCommand: msg playername hello there!;");
-  
-That for example would send an in-game message to the player "playername".
-Here are all the commands:
-
-*   `ExecutePlayerCommand [-playername]:command arguments;` 
+    Examples: `/Output/PrintToPlayer:Message from Websend;` or `Ex: /Output/PrintToPlayer-notch:Message from Websend;`
+*    `/Output/Broadcast:Text;`: Broadcast a message to all players currently playing on the server.
+    Example: `/Output/Broadcast:Message from Websend;`
+*   `/Command/ExecutePlayerCommand [-playername]:command arguments;` 
     Executes a command as a player currently playing on your server. By using "-playername", you can specify the player to set as command source, otherwise the command will be ran as the player that started the websend request. This allows you to 'force' a user to execute a command.
-    Examples: `ExecutePlayerCommand: time set 0;`, `ExecutePlayerCommand-notch: time set 0;`
-*   `ExecuteConsoleCommand :command arguments;`
+    Examples: `/Command/ExecutePlayerCommand: time set 0;`, `/Command/ExecutePlayerCommand-notch: time set 0;`
+*   `/Command/ExecuteConsoleCommand :command arguments;`
     Prints to text to a player currently playing on your server.
-    Example: `ExecuteConsoleCommand: time set 0;`
-*   `ExecuteScript :scriptname;`
+    Example: `/Command/ExecuteConsoleCommand: time set 0;`
+*   `/Command/ExecuteScript :scriptname;`
     Runs a script. The script has to be in the Websend scripts directory and has to be compiled and loaded before this is run.
-    Example: `ExecuteScript: scriptname;`
+    Example: `/Command/ExecuteScript: scriptname;`
 
 
+# PHP to Spigot
+You can initiate a command to the server via a PHP script as well. For this, you need the `Websend.php` file from the plugin directory. It contains a class that connects to the minecraft server and manages the communication. Further, you need a PHP script that loads the class and executes a command. There is an example `ExternalTimeSet.php` in the plugin directory.
 
+The base process is as follows:
+````php
+    <?php
+    // you include the Websend class
+    require_once 'Websend.php';
+    // You connect to the IP/DNS of your minecraft server
+    $ws = new Websend("172.0.0.1");
+    // You set the password as configured in the plugin config
+    $ws->password = "websendpassword";
+
+   // you attempt to connect
+   if($ws->connect()) {
+        // execute an action on the server
+        $check = $ws->doCommandAsConsole("time set 6000");
+        // the check is returning true or false
+        if (!$check) {
+            echo "Failure to set time";
+        } else {
+            echo "Time set.";
+        }
+   } else {
+        echo "Failed to connect.";
+   }
+   $ws->disconnect();
+````
+There are several commands that can be executed on the minecraft server, similar to the Spigot->PHP direction:
+
+* `$ws->doCommandAsConsole($cmd);`:  Executes a command on the console
+* `$ws->doCommandAsPlayer($cmd, $player);`: Executes a command as if done by a player
+* `$ws->writeOutputToConsole($cmd);`: Writes text to the console
+* `$ws->writeOutputToPlayer($cmd, $player);`: Writes text to a player
+* `$ws->broadcast($cmd);`: Broadcasts text to all players
+* `$ws->doScript($cmd);`: Executes a script.
 
