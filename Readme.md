@@ -1,4 +1,3 @@
-
 # Websend
 
 Websend enables PHP developers to access minecraft commands from a web-based script.
