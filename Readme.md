@@ -13,7 +13,6 @@ It allows in-game commands to execute PHP scripts and in return also execute act
 
 # Configuration
 
-
 Option | Comment
 -------|--------
 URL=phpURL | URL to send the POST data to when typing a command ingame.
