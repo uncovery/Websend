@@ -68,164 +68,8 @@ public class PacketParser {
                 PluginCommand pluginCommand = Main.getBukkitServer().getPluginCommand(command);
                 if(pluginCommand != null){
                     final Plugin targetPlugin = pluginCommand.getPlugin();
-                    success = Main.getBukkitServer().getScheduler().callSyncMethod(Main.getInstance(), new Callable<Boolean>() {
-                        @Override
-                        public Boolean call() {
-
-                            return Bukkit.dispatchCommand(new WebsendPlayerCommandSender(player, targetPlugin) {
-                                @Override
-                                public void sendSignChange(Location lctn, String[] strings, DyeColor dc) throws IllegalArgumentException {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public void openBook(ItemStack is) {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public <T> T getMemory(MemoryKey<T> mk) {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public <T> void setMemory(MemoryKey<T> mk, T t) {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public void setRotation(float f, float f1) {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public Pose getPose() {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public PersistentDataContainer getPersistentDataContainer() {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public double getAbsorptionAmount() {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public void setAbsorptionAmount(double d) {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public void sendExperienceChange(float f) {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public void sendExperienceChange(float f, int i) {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public Player.Spigot spigot() {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public float getAttackCooldown() {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public void attack(Entity entity) {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public void swingMainHand() {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public void swingOffHand() {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public boolean hasDiscoveredRecipe(NamespacedKey nk) {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public Set<NamespacedKey> getDiscoveredRecipes() {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public boolean dropItem(boolean bln) {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public Set<UUID> getCollidableExemptions() {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public int getArrowCooldown() {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public void setArrowCooldown(int i) {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public int getArrowsInBody() {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public void setArrowsInBody(int i) {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public EntityCategory getCategory() {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public void setInvisible(boolean bln) {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public boolean isInvisible() {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public void sendMessage(UUID uuid, String string) {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public void sendMessage(UUID uuid, String[] strings) {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                                @Override
-                                public void sendRawMessage(UUID uuid, String string) {
-                                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-
-                            }, command);
-                        }
-                    }).get();
+                    
+                    success = Main.getBukkitServer().getScheduler().callSyncMethod(Main.getInstance(), new CallableImpl(player, targetPlugin, command)).get();
                 }else{
                     Main.getMainLogger().log(Level.WARNING, "Cannot execute command '"+command+"': Command does not exist.");
                     success = false;
@@ -365,5 +209,185 @@ public class PacketParser {
     private static void writeString(DataOutputStream out, String string) throws IOException {
         out.writeInt(string.length());
         out.writeChars(string);
+    }
+
+    private static class CallableImpl implements Callable<Boolean> {
+
+        private final Player player;
+        private final Plugin targetPlugin;
+        private final String command;
+
+        public CallableImpl(Player player, Plugin targetPlugin, String command) {
+            this.player = player;
+            this.targetPlugin = targetPlugin;
+            this.command = command;
+        }
+
+        @Override
+        public Boolean call() {
+            return Bukkit.dispatchCommand(new WebsendPlayerCommandSenderImpl(player, targetPlugin), command);
+        }
+
+        private static class WebsendPlayerCommandSenderImpl extends WebsendPlayerCommandSender {
+
+            public WebsendPlayerCommandSenderImpl(Player player, Plugin plugin) {
+                super(player, plugin);
+            }
+
+            @Override
+            public void sendSignChange(Location lctn, String[] strings, DyeColor dc) throws IllegalArgumentException {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void openBook(ItemStack is) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public <T> T getMemory(MemoryKey<T> mk) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public <T> void setMemory(MemoryKey<T> mk, T t) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void setRotation(float f, float f1) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public Pose getPose() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public PersistentDataContainer getPersistentDataContainer() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public double getAbsorptionAmount() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void setAbsorptionAmount(double d) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void sendExperienceChange(float f) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void sendExperienceChange(float f, int i) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public Player.Spigot spigot() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public float getAttackCooldown() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void attack(Entity entity) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void swingMainHand() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void swingOffHand() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public boolean hasDiscoveredRecipe(NamespacedKey nk) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public Set<NamespacedKey> getDiscoveredRecipes() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public boolean dropItem(boolean bln) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public Set<UUID> getCollidableExemptions() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public int getArrowCooldown() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void setArrowCooldown(int i) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public int getArrowsInBody() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void setArrowsInBody(int i) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public EntityCategory getCategory() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void setInvisible(boolean bln) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public boolean isInvisible() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void sendMessage(UUID uuid, String string) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void sendMessage(UUID uuid, String[] strings) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void sendRawMessage(UUID uuid, String string) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public boolean isInWater() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        }
     }
 }
