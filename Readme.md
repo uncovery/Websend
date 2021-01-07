@@ -54,21 +54,25 @@ When Websend sends its request it includes information in the POST data.  Most o
 You can respond to the request by simply printing commands with print() or echo. Websend will then parse and execute these commands in the order that they were printed.
 
 ATTENTION: Since Websend 5.x, replies need to be sent in JSON Format and be terminated with CHR(10) which is a linefeed There is no more colon (`;`) needed to terminate. Newer NBT codes in Minecraft use a colon and break the old method of terminating a line with a colon. \n or \r instead of CHR(10) do not work.
-Ideally,  this is done with a small PHP Function such as :
+Ideally,  this is done with a small PHP Function such as:
 
 ````
 function websend_command($action, $cmd = '', $targetPlayer = null) {
+    $websend_array = array(
+        'action' => $action,
+        'targetPlayer' => $targetPlayer,
+        'command' => $cmd,
+    );
 
-	$websend_array = array(
-		'action' => $action,
-		'targetPlayer' => $targetPlayer,
-		'command' => $cmd,
-	);
-        
-	$json = json_encode($websend_array) . CHR(10);
-	print($json);
+    $json = json_encode($websend_array) . CHR(10);
+    print($json);
 }
 ````
+
+You can execute this function several times to do several things in sequence. Please note that minecraft will do commands with the same action in sequence, 
+but there is a risk that commands such as ExecuteConsoleCommand take longer than PrintToConsole. So if you execeute a PrintToConsole after a ConsoleCommand, the PrintToConsole might still happen first.
+
+A text send to the player or console can contain a line break with \n. This line break will be executed on the console and on the user screen.
 
 The action needs to be one of the following types, capitalization is not relevant:
 
@@ -79,7 +83,7 @@ The action needs to be one of the following types, capitalization is not relevan
 *   `ExecuteConsoleCommand`: Executes hatever the `command` is set to as if it was entered directly on the server console.
 *   `toggleDebug`: Switches debug on or off, depending what the current status is. `command` is ignored, should ideally be '', targetPlayer needs to be `null`.
 *   `executeScript`: Runs a script. The script (specified by `command`) that has to be in the Websend scripts directory and has to be compiled and loaded before this is run.
-*   `setresponseurl`: Changes the responseURL as set in the websend config file to whatever is set in `command`. `targetPlayer` needs to be `null`.
+*   `setResponseURL`: Changes the responseURL as set in the websend config file to whatever is set in `command`. `targetPlayer` needs to be `null`.
 
 # PHP to Spigot
 You can initiate a command to the server via a PHP script as well. For this, you need the `Websend.php` file from the plugin directory. It contains a class that connects to the minecraft server and manages the communication. Further, you need a PHP script that loads the class and executes a command. There is an example `ExternalTimeSet.php` in the plugin directory.
