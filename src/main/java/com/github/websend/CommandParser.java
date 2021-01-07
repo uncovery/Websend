@@ -7,10 +7,10 @@ import org.bukkit.Server;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.json.*;
 
 public class CommandParser {
 
-    // <editor-fold defaultstate="collapsed" desc="VARIABLES AND CONSTRUCTOR">
     Settings settings;
     Server server;
 
@@ -18,132 +18,126 @@ public class CommandParser {
         settings = Main.getSettings();
         server = Main.getBukkitServer();
     }
-
-	// </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="PARSING - CATEGORY">
-    public void parse(String line, Player player) { // Now it's slightly better.
-        if (line.contains(";")) { // check split sign
-            Main.logDebugInfo("Websend: ';' found");
-            String[] lineArray = line.split(";"); // split line into seperate
-            // command lines
-            for (int i = 0; i < lineArray.length; i++) { // for every command line
-                if (lineArray[i].contains("/Command/")) { // Check if line is an actual command line
-                    parseCommand(lineArray[i], player);
-                } else if (lineArray[i].contains("/Output/")) {
-                    parseOutput(lineArray[i], player);
-                } else {
-                    Main.logDebugInfo(Level.WARNING, "Command parsing: No command or output tag found!");
-                }
+    
+    /**
+     * This needs to be improved. We need JSON compatible strings so we don't need to check for ;
+     * @param line
+     * @param player 
+     */
+    public void parse(String line, Player player) { 
+        // new version, do we have JSON?
+        if (isJSONValid(line)) {
+            JSONObject JSONobj = new JSONObject(line);
+            
+            String targetPlayer;
+            if (!JSONobj.isNull("targetPlayer")) {
+                targetPlayer = JSONobj.getString("targetPlayer").trim();
+            } else {
+                targetPlayer = null;
+            }
+            
+            if (JSONobj.isNull("command")) {
+                 Main.getMainLogger().info("Websend ERROR: The 'command' component of the JSON is missing: " + line);
+                 return;
+            }
+            
+            if (JSONobj.isNull("action")) {
+                 Main.getMainLogger().info("Websend ERROR: The 'action' component of the JSON is missing!" + line);
+                 return;
+            }
+            
+            Main.logDebugInfo("Command parsing: Execute JSON commnad " + line);
+            
+            String action = JSONobj.getString("action").trim().toLowerCase();
+            String command = JSONobj.getString("command").trim();
+              
+            switch (action) {
+                case "executeplayercommand":
+                    onExecutePlayerCommand(player, command, targetPlayer);
+                    break;
+                case "executeconsolecommand":
+                    onExecuteConsoleCommand(player, command);
+                    break;
+                case "executescript":
+                    onExecuteScript(command);
+                    break;    
+                case "setresponseurl":
+                    onSetResponseURL(command);
+                    break;             
+                case "printtoconsole":
+                    onPrintToConsole(command);
+                    break;
+                case "printtoplayer":
+                    onPrintToPlayer(command, player, targetPlayer);
+                    break;
+                case "broadcast":
+                    onBroadcast(command);
+                    break;
+                case "toggledebug":
+                    onToggleDebug();
+                    break;
+                default:
+                    Main.getMainLogger().info("Websend ERROR: invalid action '" + action + "'. Valid Actions are (case-insensitive):");
+                    Main.getMainLogger().info("'ExecutePlayerCommand','ExecuteConsoleCommand','ExecuteScript','SetResponseURL','PrintToConsole','PrintToPlayer','Broadcast','toggleDebug'");
+                    break;
             }
         } else {
-            Main.logDebugInfo(Level.WARNING, "Command parsing: No ; found.");
+            Main.getMainLogger().info("Websend ERROR: The input format from PHP is not valid JSON: " + line);
         }
-    }
-
-	// </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="PARSING - COMMAND">
-    private void parseCommand(String line, Player player) {
-        Main.logDebugInfo("Command parsing: A command line was found.");
-        String splittedLine[];
-        splittedLine = line.split("/Command/"); // split command line into
-        // '/command/' and actual
-        // command
-        if (splittedLine[1].contains("ExecutePlayerCommand:")) {
-            onExecutePlayerCommand(player, splittedLine[1]);
-        } else if (splittedLine[1].contains("ExecutePlayerCommand-")) {
-            onExecutePlayerCommand(splittedLine[1]);
-        } else if (splittedLine[1].contains("ExecuteConsoleCommand:")) {
-            onExecuteConsoleCommand(player, splittedLine[1]);
-        } else if (splittedLine[1].contains("ExecuteScript:")) {
-            onExecuteScript(splittedLine[1]);
-        } else if (splittedLine[1].contains("SetResponseURL:")) {
-            onSetResponseURL(splittedLine[1]);
-        } else {
-            Main.getMainLogger().info("Websend ERROR: While parsing php output, websend found");
-            Main.getMainLogger().info("an error on output line " + line + ": Invalid command.");
-        }
-    }
-
-	// </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="PARSING - OUTPUT">
-    private void parseOutput(String line, Player player) {
-        Main.logDebugInfo("Command parsing: An output line was found.");
-        String splittedLine[];
-        splittedLine = line.split("/Output/"); // split command line into
-        // '/Output/' and actual command
-        if (splittedLine[1].contains("PrintToConsole:")) {
-            onPrintToConsole(splittedLine[1]);
-        } else if (splittedLine[1].contains("PrintToPlayer:")) {
-            onPrintToPlayer(splittedLine[1], player);
-        } else if (splittedLine[1].contains("PrintToPlayer-")) {
-            onPrintToPlayer(splittedLine[1]);
-        } else if (splittedLine[1].contains("Broadcast:")) {
-            onBroadcast(splittedLine[1]);
-        }
-    }
-
-	// </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="EXECUTION - COMMAND">
-    // <editor-fold defaultstate="collapsed" desc="onSetResponseURL">
-    private void onSetResponseURL(String line) {
-        String newURL = line.split("SetResponseURL:")[1];
+    }    
+    
+    private void onSetResponseURL(String newURL) {
         Main.logDebugInfo("Command parsing: Changed ResponseURL to " + newURL);
         settings.setResponseURL(newURL);
     }
+    
+    private void onToggleDebug() {
+        if (settings.isDebugMode()) {
+            settings.setDebugMode(false);
+            Main.getMainLogger().info("Debug mode is now OFF"); 
+        } else {
+            settings.setDebugMode(true);
+            Main.logDebugInfo("Command parsing: Toggle debug to ON");
+        }
+        
+    }
 
-	// </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="onExecutePlayerCommand">
-    private void onExecutePlayerCommand(Player player, String line) {
+    private void onExecutePlayerCommand(Player player, String command, String targetPlayer) {
         if (player == null) {
             Main.getMainLogger().info("Websend: ExecutePlayerCommand is used in a wrong context.");
         }
-        String[] commandArray = line.split("ExecutePlayerCommand:");
-        Main.logDebugInfo("Command parsing: An ExecutePlayerCommand was found: '" + Util.stringArrayToString(commandArray) + "'");
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Task(commandArray, player) {
+        Main.logDebugInfo("Command parsing: An ExecutePlayerCommand was found: '" + command + "'");
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Task(command, player, targetPlayer) {
 
             @Override
             public void run() {
-                String[] commandArray = (String[]) this.getArgs().get(0);
+                String command = (String) this.getArgs().get(0);
                 Player player = (Player) this.getArgs().get(1);
-                try {
-                    if (player == null) {
-                        Main.getMainLogger().info("Command dispatching from terminal is not allowed. Try again in-game.");
-                    } else if (!player.getServer().dispatchCommand(player, commandArray[1])) { // execute command and check for succes.
-                        player.sendMessage("Command dispatching failed: '" + commandArray[1] + "'"); // error
+                String targetPlayer = (String) this.getArgs().get(2);
+                
+                if (targetPlayer != null) {
+                    Player fakePlayer = Util.findPlayer(targetPlayer);
+                    if (!server.dispatchCommand(fakePlayer, command)) { // execute command and check for succes.
+                        Main.getMainLogger().info("Error executing onExecutePlayerCommand: Command dispatching failed: '" + command + "'"); // error
                     }
-                } catch (Exception ex) {
-                    Main.getMainLogger().info("An error has occured, are you trying to execute a player command from console?");
-                }
-            }
-
-        });
-    }
-
-	// </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="onExecutePlayerCommand">
-    private void onExecutePlayerCommand(String line) {
-        // split line into command and variables
-        String[] commandArray = line.split("ExecutePlayerCommand-");
-        Main.logDebugInfo("Command parsing: An ExecutePlayerCommand was found: '" + Util.stringArrayToString(commandArray) + "'");
-
-        Object[] taskArgs = new Object[]{commandArray};
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Task(taskArgs) {
-            @Override
-            public void run() {
-                String argArray[] = ((String[]) this.getArgs().get(0))[1].split(":");
-                Player fakePlayer = Util.findPlayer(argArray[0].trim());
-                if (!server.dispatchCommand(fakePlayer, argArray[1])) { // execute command and check for succes.
-                    Main.getMainLogger().info("Command dispatching failed: '" + argArray[1] + "'"); // error
+                } else {
+                    try {
+                        if (player == null) {
+                            Main.getMainLogger().info("Error executing onExecutePlayerCommand: Command dispatching from terminal is not allowed. Try again in-game or set a targetplayer.");
+                        } else if (!player.getServer().dispatchCommand(player, command)) { // execute command and check for succes.
+                            player.sendMessage("Error executing onExecutePlayerCommand: Command dispatching failed: '" + command + "'"); // error
+                        }
+                    } catch (Exception ex) {
+                        Main.getMainLogger().info("Error executing onExecutePlayerCommand: Are you trying to execute a player command from console?");
+                    }
                 }
             }
         });
     }
 
-	// </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="onExecuteScript">
-    private void onExecuteScript(String line) {
-        String scriptName = line.split(":")[1];
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Task(scriptName.trim()) {
+    private void onExecuteScript(String command) {
+        Main.logDebugInfo("Command parsing: executing script: " + command);
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Task(command) {
             @Override
             public void run() {
                 Main.getScriptManager().invokeScript((String) this.getArgs().get(0));
@@ -151,32 +145,81 @@ public class CommandParser {
         });
     }
 
-	// </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="onExecuteConsoleCommand">
-    private void onExecuteConsoleCommand(Player player, String line) {
+    private void onExecuteConsoleCommand(Player player, String command) {
         // split line into command and variables
-        String[] commandArray = line.split("ExecuteConsoleCommand:");
-        Main.logDebugInfo("Command parsing: An ExecuteConsoleCommand was found: '" + Util.stringArrayToString(commandArray) + "'");
+        Main.logDebugInfo("Command parsing: An ExecuteConsoleCommand was found: '" + command + "'");
 
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Task(commandArray, player) {
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Task(command, player) {
             @Override
             public void run() {
-                String[] commandArray = (String[]) this.getArgs().get(0);
+                String command = (String) this.getArgs().get(0);
                 Player player = (Player) this.getArgs().get(1);
                 ConsoleCommandSender ccs = server.getConsoleSender();
-                if (!server.dispatchCommand(ccs, commandArray[1])) { // execute command and check for succes.
+                if (!server.dispatchCommand(ccs, command)) { // execute command and check for succes.
                     if (player != null) {
-                        player.sendMessage("Command dispatching failed: '" + commandArray[1] + "'"); // error
+                        player.sendMessage("Command dispatching failed: '" + command + "'"); // error
                     } else {
-                        Main.getMainLogger().info("Command dispatching failed: '" + commandArray[1] + "'"); // error
+                        Main.getMainLogger().info("Command dispatching failed: '" + command + "'"); // error
                     }
                 }
             }
         });
     }
 
-	// </editor-fold>
-    //<editor-fold defaultstate="collapsed" desc="onExecuteConsoleCommandAndReturn">
+    private void onPrintToConsole(String line) {
+        Main.logDebugInfo("Command parsing: printing text to console " + line);
+        String text = line.replaceFirst("PrintToConsole:", "");
+        Main.getMainLogger().info(text);
+    }
+
+    private void onPrintToPlayer(String line, Player player, String targetPlayer) {
+        Main.logDebugInfo("Command parsing: printing text to player  " + line);
+        if (player == null && targetPlayer == null) {
+            Main.getMainLogger().log(Level.WARNING, "Websend: No player to print text to. Use the targetPlayer argument in JSON to sent text in this context.");
+            Main.getMainLogger().log(Level.WARNING, line.replaceFirst("PrintToConsole:", ""));
+        } else if (player != null) {
+            String playerName = targetPlayer;
+            String message = line;       
+            
+            if ("console".equals(playerName)) {
+                Main.logDebugInfo("Websend: Player 'console'? Using PrintToConsole instead.");
+            } else if (targetPlayer == null) {
+                Main.getMainLogger().log(Level.WARNING, "Websend: No player '" + playerName + "' found on PrintToPlayer.");
+            } else if (!player.isOnline()) {
+                Main.logDebugInfo("Websend: Player '" + playerName + "' is offline. Ignoring PrintToPlayer");
+            } else {
+                player.sendMessage(parseColor(message));
+            }
+            String text = line.replaceFirst("PrintToPlayer:", "");
+            player.sendMessage(parseColor(text));
+        } else if (targetPlayer != null) {
+            
+            
+        }
+    }
+
+    private void onBroadcast(String line) {
+        Main.logDebugInfo("Command parsing: Broadcasting text " + line);
+        String text = line.replaceFirst("Broadcast:", "");
+        server.broadcastMessage(parseColor(text));
+    }
+
+    public String parseColor(String line) {
+        return ChatColor.translateAlternateColorCodes('&', line);
+    }
+    
+    // check if JSon is valid
+    // from https://stackoverflow.com/questions/10174898/how-to-check-whether-a-given-string-is-valid-json-in-java
+    public boolean isJSONValid(String test) {
+        try {
+            new JSONObject(test);
+        } catch (JSONException ex) {
+            return false;
+        }
+        return true;
+    }      
+
+    
     @SuppressWarnings("unused")
     private void onExecuteConsoleCommandAndReturn(String line) {
         // split line into command and variables
@@ -194,9 +237,7 @@ public class CommandParser {
             // TODO: Implement or remove.
         }
     }
-      //</editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="onExecutePlayerCommandAndReturn">
     @SuppressWarnings("unused")
     private void onExecutePlayerCommandAndReturn(String line) {
         String commandArray[];
@@ -217,60 +258,5 @@ public class CommandParser {
             }
             // TODO: Implement or remove.
         }
-    }
-
-	// </editor-fold>
-	// </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="EXECUTION - OUTPUT">
-    // <editor-fold defaultstate="collapsed" desc="onPrintToConsole">
-    private void onPrintToConsole(String line) {
-        String text = line.replaceFirst("PrintToConsole:", "");
-        Main.getMainLogger().info(text);
-    }
-
-	// </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="onPrintToPlayer">
-    private void onPrintToPlayer(String line, Player player) {
-        if (player == null) {
-            Main.getMainLogger().log(Level.WARNING, "Websend: No player to print text to. Use 'PrintToPlayer-playername: text' to sent text in this context.");
-            Main.getMainLogger().log(Level.WARNING, line.replaceFirst("PrintToConsole:", ""));
-        } else {
-            String text = line.replaceFirst("PrintToPlayer:", "");
-            player.sendMessage(parseColor(text));
-        }
-    }
-
-	// </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="onPrintToPlayer">
-    private void onPrintToPlayer(String line) {
-        String commandData = line.replace("PrintToPlayer-", "");
-        String[] commandDataArray = commandData.split(":");
-        String playerName = commandDataArray[0];
-        String message = commandDataArray[1];
-        Player currentPlayer = Util.findPlayer(playerName);
-        if ("console".equals(playerName)) {
-            Main.logDebugInfo("Websend: Player 'console'? Using PrintToConsole instead.");
-        } else if (currentPlayer == null) {
-            Main.getMainLogger().log(Level.WARNING, "Websend: No player '" + playerName + "' found on PrintToPlayer.");
-        } else if (!currentPlayer.isOnline()) {
-            Main.logDebugInfo("Websend: Player '" + playerName + "' is offline. Ignoring PrintToPlayer");
-        } else {
-            currentPlayer.sendMessage(parseColor(message));
-        }
-    }
-
-	// </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="onBroadcast">
-    private void onBroadcast(String line) {
-        String text = line.replaceFirst("Broadcast:", "");
-        server.broadcastMessage(parseColor(text));
-    }
-
-	// </editor-fold>
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="ETC - CHATCOLOR">
-    public String parseColor(String line) {
-        return ChatColor.translateAlternateColorCodes('&', line);
-    }
-	// </editor-fold>
+    }    
 }

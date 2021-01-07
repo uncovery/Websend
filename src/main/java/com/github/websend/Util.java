@@ -32,23 +32,31 @@ public class Util {
         }
     }
     
+    /**
+     * returns Player Object or Null
+     * 
+     * @param playerStr
+     * @return 
+     */
     public static Player findPlayer(String playerStr){
         Player player = null;
-        try{
+        try {
             UUID playerID = UUID.fromString(playerStr);
             player = Main.getBukkitServer().getPlayer(playerID);
-        }catch(IllegalArgumentException ex){
-            if(Main.getSettings().isDebugMode()){
+        } catch (IllegalArgumentException ex) {
+            if (Main.getSettings().isDebugMode()) {
                 Main.logDebugInfo(Level.INFO, 
                     "Could not find player with UUID '"+playerStr+"'. "
                     + "Searching for a player with a matching name instead.");
             }
         }
         
-        if(player == null){
+        if (player == null) {
             player = Main.getBukkitServer().getPlayer(playerStr);
         }
         
         return player;
-    }
+    }  
 }
+
+

@@ -66,12 +66,12 @@ public class PacketParser {
         try {
             if (Main.getSettings().areCommandExecutorsWrapped()) {
                 PluginCommand pluginCommand = Main.getBukkitServer().getPluginCommand(command);
-                if(pluginCommand != null){
+                if (pluginCommand != null){
                     final Plugin targetPlugin = pluginCommand.getPlugin();
                     
                     success = Main.getBukkitServer().getScheduler().callSyncMethod(Main.getInstance(), new CallableImpl(player, targetPlugin, command)).get();
-                }else{
-                    Main.getMainLogger().log(Level.WARNING, "Cannot execute command '"+command+"': Command does not exist.");
+                } else {
+                    Main.getMainLogger().log(Level.WARNING, "Cannot execute command '" + command + "': Command does not exist.");
                     success = false;
                 }
             } else {

@@ -17,18 +17,19 @@ function websend_connect() {
 
     $checkpass = $CONFIG['checkpass'];
     $hashAlgorithm =$CONFIG['hashAlgorithm'];
-
-    $receivedHash = $_POST['authKey'];
+    
+    $receivedHash = filter_input(INPUT_POST, 'authKey', FILTER_UNSAFE_RAW);
+    $is_compressed = filteR_input(INPUT_POST, 'isCompressed', FILTER_SANITIZE_STRING);
 
     $args = $_POST["args"]; //each argument is stored in an array called "args"
-
+    
     if ($args[0] == "") {
-        websend_fatal_error("Empty argument!");
+        websend_fatal_error("Empty argument! Don't just call ws/websend, add more arguments.");
     }
 
     if ($receivedHash != "") {
         if ($receivedHash == hash($hashAlgorithm, $checkpass)) {
-            if($_POST['isCompressed'] == "true" && isset($_FILES['jsonData']['tmp_name'])){
+            if ($is_compressed == "true" && isset($_FILES['jsonData']['tmp_name'])){
                 $data = gzdecode(file_get_contents($_FILES['jsonData']['tmp_name']));
             } else {
                 $data = $_POST["jsonData"];
@@ -36,7 +37,7 @@ function websend_connect() {
 
             $json = json_decode($data, true);
             if ($json == ''){
-                websend_fatal_error("Failed to retrieve JSON data!");
+                websend_fatal_error("Failed to retrieve & decode JSON data!");
             } else {
                 return $json;
             }
@@ -55,8 +56,25 @@ function websend_connect() {
  * @param type $msg
  */
 function websend_fatal_error($msg) {
-    print('/Output/PrintToConsole: Websend Error:' . $msg . ';');
+    websend_command('PrintToConsole',  'Websend Error: ' . $msg, null);
     error_log("Websend error: " . $msg);
     die();
 }
 
+/**
+ * Sending replies to the minecraft server when a command has been executed with ws....
+ * 
+ * @param type $action
+ * @param type $cmd
+ * @param type $player
+ */
+function websend_command($action, $cmd = '', $target_player = null) {
+    $websend_array = array(
+        'action' => $action,
+        'targetPlayer' => $target_player,
+        'command' => $cmd,
+    );
+
+    $json = json_encode($websend_array) . CHR(10);
+    print($json);
+}
