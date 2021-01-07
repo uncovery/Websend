@@ -63,13 +63,19 @@ Ideally,  this is done with a small PHP Function such as:
 // array key capitalization is relevant.
 function websend_command($action, $command = '', $targetPlayer = null) {
     $websend_array = array(
-        'action' => $action,  // this is the action you want to do (see list below)
-        'targetPlayer' => $targetPlayer, // use this in case you have a target player other than the user who ran the command in-game
-        'command' => $command, // this is the command/text to be executed/displayed
+        // this is the action you want to do (see list below)
+        'action' => $action,
+        // use this in case you have a target player other than the user who ran the command in-game
+        'targetPlayer' => $targetPlayer,
+        // this is the command/text to be executed/displayed
+        'command' => $command,
     );
 
-    $json = json_encode($websend_array) . CHR(10); // json-encode the array and append the terminating CHR(10) to conclude
-    print($json); // finally send this to websend.
+    // json-encode the array and append the terminating CHR(10) to conclude
+    $json = json_encode($websend_array) . CHR(10);
+
+    // finally send this to websend.
+    print($json);
 }
 ?>
 ````
