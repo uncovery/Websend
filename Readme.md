@@ -6,15 +6,17 @@ It allows in-game commands to execute PHP scripts and in return also execute act
 # Installation
 
 * Put the plugin in the plugin folder.
-* Start/reload the server to allow the configuration file to be generated.
+* Restart the server to allow the configuration file to be generated.
 * Stop the server.
 * Edit the configuration file.
+* Start the server
+* run a command as player or console, such as /ws test
 
 # Configuration
 
 Option | Comment
 -------|--------
-URL=phpURL | URL to send the POST data to when typing a command ingame.
+URL=phpURL | URL to send the POST data to when typing a command ingame. You can point it to the minecraft.php in the example files.
 PASS=password | Password to be used in connections.
 WEBLISTENER_ACTIVE=false/true | Set to true to enable PHP -> Spigot connections. Disabled by default.
 ALTPORT=portnumber | Enter a portnumber here to use a different TCP port than 4445 for hosting the PHP -> Spigot server.
@@ -57,10 +59,11 @@ ATTENTION: Since Websend 5.x, replies need to be sent in JSON Format and be term
 Ideally,  this is done with a small PHP Function such as:
 
 ````
+// array key capitalization is relevant.
 function websend_command($action, $cmd = '', $targetPlayer = null) {
     $websend_array = array(
         'action' => $action,
-        'targetPlayer' => $targetPlayer,
+        'targetPlayer' => $targetPlayer, 
         'command' => $cmd,
     );
 
