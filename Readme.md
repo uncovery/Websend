@@ -51,11 +51,9 @@ When Websend sends its request it includes information in the POST data.  Most o
 
 ## Sending a reply
 
-You can respond to the request by simply printing commands with print() or echo. Websend will then parse and execute these commands in the order that they were printed. Each command is separated by a semi-colon (;).
-You can either reply with a simple text or even execute commands in-game:
+You can respond to the request by simply printing commands with print() or echo. Websend will then parse and execute these commands in the order that they were printed.
 
 ATTENTION: Since Websend 5.x, replies need to be sent in JSON Format and be terminated with CHR(10) which is a linefeed There is no more colon (`;`) needed to terminate. Newer NBT codes in Minecraft use a colon and break the old method of terminating a line with a colon. \n or \r instead of CHR(10) do not work.
-
 Ideally,  this is done with a small PHP Function such as :
 
 ````
