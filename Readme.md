@@ -59,20 +59,22 @@ ATTENTION: Since Websend 5.x, replies need to be sent in JSON Format and be term
 Ideally,  this is done with a small PHP Function such as:
 
 ````
+<?php
 // array key capitalization is relevant.
-function websend_command($action, $cmd = '', $targetPlayer = null) {
+function websend_command($action, $command = '', $targetPlayer = null) {
     $websend_array = array(
-        'action' => $action,
-        'targetPlayer' => $targetPlayer, 
-        'command' => $cmd,
+        'action' => $action,  // this is the action you want to do (see list below)
+        'targetPlayer' => $targetPlayer, // use this in case you have a target player other than the user who ran the command in-game
+        'command' => $command, // this is the command/text to be executed/displayed
     );
 
-    $json = json_encode($websend_array) . CHR(10);
-    print($json);
+    $json = json_encode($websend_array) . CHR(10); // json-encode the array and append the terminating CHR(10) to conclude
+    print($json); // finally send this to websend.
 }
+?>
 ````
 
-You can execute this function several times to do several things in sequence. Please note that minecraft will do commands with the same action in sequence, 
+You can execute this function several times to do several things in sequence. Please note that minecraft will do commands with the same action in sequence,
 but there is a risk that commands such as ExecuteConsoleCommand take longer than PrintToConsole. So if you execeute a PrintToConsole after a ConsoleCommand, the PrintToConsole might still happen first.
 
 A text send to the player or console can contain a line break with \n. This line break will be executed on the console and on the user screen.
