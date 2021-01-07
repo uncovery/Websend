@@ -76,6 +76,14 @@ Here is a complete list. Don't forget to prefix them with `/Output/ `:
     Runs a script. The script has to be in the Websend scripts directory and has to be compiled and loaded before this is run.
     Example: `/Command/ExecuteScript: scriptname;`
 
+*   `PrintToConsole`: Prints whatever the `command` is set to the console. In-game players won't see this. The targetPlayer argument is ignored and should be `null`.
+*   `PrintToPlayer`: Prints whatever the `command` is set to as a message to a player currently playing on your server. If you provide targetPlayer, this will be the target, otherwise it will be who
+*   `Broadcast`: Broadcasts whatever the `command` is set to to all players currently playing on the server.
+*   `ExecutePlayerCommand`: Executes whatever the `command` is set as a player currently playing on your server. By using "targetPlayer", you can specify the player to set as command source, otherwise the command will be ran as the player that started the websend request. This allows you to 'force' a user to execute a command.
+*   `ExecuteConsoleCommand`: Executes hatever the `command` is set to as if it was entered directly on the server console.
+*   `toggleDebug`: Switches debug on or off, depending what the current status is. `command` is ignored, should ideally be '', targetPlayer needs to be `null`.
+*   `executeScript`: Runs a script. The script (specified by `command`) that has to be in the Websend scripts directory and has to be compiled and loaded before this is run.
+*   `setresponseurl`: Changes the responseURL as set in the websend config file to whatever is set in `command`. `targetPlayer` needs to be `null`.
 
 # PHP to Spigot
 You can initiate a command to the server via a PHP script as well. For this, you need the `Websend.php` file from the plugin directory. It contains a class that connects to the minecraft server and manages the communication. Further, you need a PHP script that loads the class and executes a command. There is an example `ExternalTimeSet.php` in the plugin directory.
