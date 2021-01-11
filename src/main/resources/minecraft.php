@@ -5,6 +5,9 @@ $CONFIG['checkpass'] = "PutYourPasswordHere";
 $CONFIG['hashAlgorithm'] = "sha512";
 
 $json = websend_connect();
+// get the command arguments and return them to the console:
+$arguments = $_POST['args'];
+websend_command('PrintToConsole', 'you sent the arguments: '. implode(",", $arguments));
 
 /**
  * Basic connection function that checks if everything is properly set up
@@ -16,7 +19,7 @@ function websend_connect() {
     global $CONFIG;
 
     $checkpass = $CONFIG['checkpass'];
-    $hashAlgorithm =$CONFIG['hashAlgorithm'];
+    $hashAlgorithm = $CONFIG['hashAlgorithm'];
     
     $receivedHash = filter_input(INPUT_POST, 'authKey', FILTER_UNSAFE_RAW);
     $is_compressed = filteR_input(INPUT_POST, 'isCompressed', FILTER_SANITIZE_STRING);

@@ -41,7 +41,7 @@ This allows you to execute PHP scripts by typing in-game commands. Websend creat
 * Open the Websend plugin configuration file.
 * Set the "URL=" option to the url of your php file.
 * Start your Bukkit server.
-* Try command “/ws example”
+* Try command “/ws argument1 argument2”. Just /ws will return an "Empty argument" error 
 
 ## Sending a command
 
