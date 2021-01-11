@@ -1,0 +1,11 @@
+This is a changelog from v.5.0 on. Previous changes cover updates to make Websend compatible with recent versions of minecraft and additional information passed in JSON.
+
+Version 5.1:
+
+- improved debug info regarding arguments (not) passed.
+- allow toggleDebug to set a state instead of only switching the current state. See Readme.md for details.
+
+Version 5.0:
+
+- add toggleDebug action. See Readme.md for details.
+- convert data format to be received from mixed-delimited text to JSON. This breaks current code. See Readme.md for details.
