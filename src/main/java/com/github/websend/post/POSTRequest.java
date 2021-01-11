@@ -36,6 +36,13 @@ public class POSTRequest {
 
     public POSTRequest(URL url, String args[], Player player, boolean isResponse) {
         this.player = player;
+
+        if (args.length == 0) {
+            Main.getMainLogger().info("POSTRequest ERROR: You need to pass arguments with /ws and /websend!");
+        } else {
+            Main.logDebugInfo("POSTRequest: Executing commands by player " + player.getDisplayName() + " with arguments '" + String.join("', '", args) + "'");
+        }
+
         content.add(new BasicNameValuePair("isResponse", Boolean.toString(isResponse)));
         content.add(new BasicNameValuePair("authKey", Util.hash(Main.getSettings().getPassword())));
         content.add(new BasicNameValuePair("isCompressed", Boolean.toString(Main.getSettings().areRequestsGZipped())));
@@ -52,6 +59,13 @@ public class POSTRequest {
     }
 
     public POSTRequest(URL url, String args[], String playerNameArg, boolean isResponse) {
+
+        if (args.length == 0) {
+            Main.getMainLogger().info("POSTRequest ERROR: You need to pass arguments with /ws and /websend!");
+        } else {
+            Main.logDebugInfo("POSTRequest: Executing commands by player " + playerNameArg + " with arguments '" + String.join("', '", args) + "'");
+        }
+
         content.add(new BasicNameValuePair("isResponse", Boolean.toString(isResponse)));
         content.add(new BasicNameValuePair("authKey", Util.hash(Main.getSettings().getPassword())));
         content.add(new BasicNameValuePair("isCompressed", Boolean.toString(Main.getSettings().areRequestsGZipped())));

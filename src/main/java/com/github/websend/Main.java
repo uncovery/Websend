@@ -132,13 +132,11 @@ public class Main extends JavaPlugin {
     }
 
     public static void doCommand(String[] args, Player player) {
-        Main.logDebugInfo("doCommand: Executing commands by player " + player.getDisplayName() + " with arguments '" + String.join("', '", args) + "'");
         POSTRequest request = new POSTRequest(Main.getSettings().getURL(), args, player, false);
         requestThreadPool.doRequest(request);
     }
 
     public static void doCommand(String[] args, String ply) {
-        Main.logDebugInfo("doCommand: Executing commands by player " + ply + " with arguments '" + String.join("', '", args) + "'");
         POSTRequest request = new POSTRequest(Main.getSettings().getURL(), args, ply, false);
         requestThreadPool.doRequest(request);
     }
@@ -150,7 +148,6 @@ public class Main extends JavaPlugin {
         } else if (cmd.getName().equalsIgnoreCase("websend") || cmd.getName().equalsIgnoreCase("ws")) {
             URL url = Main.getSettings().getURL();
             if (sender instanceof ConsoleCommandSender || sender instanceof RemoteConsoleCommandSender || sender instanceof BlockCommandSender) {
-                Main.logDebugInfo("onCommand: Executing commands by console with arguments '" + String.join("', '", args) + "'");
                 POSTRequest request = new POSTRequest(url, args, "@Console", false);
                 requestThreadPool.doRequest(request);
                 return true;
@@ -165,7 +162,6 @@ public class Main extends JavaPlugin {
                             }
                         }
                     }
-                    Main.logDebugInfo("onCommand: Executing commands by player " + plsender.getDisplayName() +" with arguments '" + String.join("', '", args) + "'");
                     POSTRequest request = new POSTRequest(url, args, plsender, false);
                     requestThreadPool.doRequest(request);
                     return true;
