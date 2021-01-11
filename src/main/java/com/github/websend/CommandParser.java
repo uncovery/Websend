@@ -18,39 +18,38 @@ public class CommandParser {
         settings = Main.getSettings();
         server = Main.getBukkitServer();
     }
-    
+
     /**
-     * This needs to be improved. We need JSON compatible strings so we don't need to check for ;
      * @param line
-     * @param player 
+     * @param player
      */
-    public void parse(String line, Player player) { 
+    public void parse(String line, Player player) {
         // new version, do we have JSON?
         if (isJSONValid(line)) {
             JSONObject JSONobj = new JSONObject(line);
-            
+
             String targetPlayer;
             if (!JSONobj.isNull("targetPlayer")) {
                 targetPlayer = JSONobj.getString("targetPlayer").trim();
             } else {
                 targetPlayer = null;
             }
-            
+
             if (JSONobj.isNull("command")) {
                  Main.getMainLogger().info("Websend ERROR: The 'command' component of the JSON is missing: " + line);
                  return;
             }
-            
+
             if (JSONobj.isNull("action")) {
                  Main.getMainLogger().info("Websend ERROR: The 'action' component of the JSON is missing!" + line);
                  return;
             }
-            
+
             Main.logDebugInfo("Command parsing: Execute JSON commnad " + line);
-            
+
             String action = JSONobj.getString("action").trim().toLowerCase();
             String command = JSONobj.getString("command").trim();
-              
+
             switch (action) {
                 case "executeplayercommand":
                     onExecutePlayerCommand(player, command, targetPlayer);
@@ -60,10 +59,10 @@ public class CommandParser {
                     break;
                 case "executescript":
                     onExecuteScript(command);
-                    break;    
+                    break;
                 case "setresponseurl":
                     onSetResponseURL(command);
-                    break;             
+                    break;
                 case "printtoconsole":
                     onPrintToConsole(command);
                     break;
@@ -74,7 +73,7 @@ public class CommandParser {
                     onBroadcast(command);
                     break;
                 case "toggledebug":
-                    onToggleDebug();
+                    onToggleDebug(command);
                     break;
                 default:
                     Main.getMainLogger().info("Websend ERROR: invalid action '" + action + "'. Valid Actions are (case-insensitive):");
@@ -84,22 +83,31 @@ public class CommandParser {
         } else {
             Main.getMainLogger().info("Websend ERROR: The input format from PHP is not valid JSON: " + line);
         }
-    }    
-    
+    }
+
     private void onSetResponseURL(String newURL) {
         Main.logDebugInfo("Command parsing: Changed ResponseURL to " + newURL);
         settings.setResponseURL(newURL);
     }
-    
-    private void onToggleDebug() {
-        if (settings.isDebugMode()) {
-            settings.setDebugMode(false);
-            Main.getMainLogger().info("Debug mode is now OFF"); 
+
+    private void onToggleDebug(String arg) {
+        if (arg == null) {
+            if (settings.isDebugMode()) {
+                settings.setDebugMode(false);
+                Main.getMainLogger().info("Debug mode is now OFF");
+            } else {
+                settings.setDebugMode(true);
+                Main.logDebugInfo("Debug mode is now ON");
+            }
         } else {
-            settings.setDebugMode(true);
-            Main.logDebugInfo("Command parsing: Toggle debug to ON");
+            if ("on".equals(arg)) {
+                settings.setDebugMode(true);
+                Main.logDebugInfo("Debug mode is now ON");
+            } else if ("off".equals(arg)) {
+                settings.setDebugMode(false);
+                Main.getMainLogger().info("Debug mode is now OFF");
+            }
         }
-        
     }
 
     private void onExecutePlayerCommand(Player player, String command, String targetPlayer) {
@@ -114,7 +122,7 @@ public class CommandParser {
                 String command = (String) this.getArgs().get(0);
                 Player player = (Player) this.getArgs().get(1);
                 String targetPlayer = (String) this.getArgs().get(2);
-                
+
                 if (targetPlayer != null) {
                     Player fakePlayer = Util.findPlayer(targetPlayer);
                     if (!server.dispatchCommand(fakePlayer, command)) { // execute command and check for succes.
@@ -179,8 +187,8 @@ public class CommandParser {
             Main.getMainLogger().log(Level.WARNING, line.replaceFirst("PrintToConsole:", ""));
         } else if (player != null) {
             String playerName = targetPlayer;
-            String message = line;       
-            
+            String message = line;
+
             if ("console".equals(playerName)) {
                 Main.logDebugInfo("Websend: Player 'console'? Using PrintToConsole instead.");
             } else if (targetPlayer == null) {
@@ -193,8 +201,8 @@ public class CommandParser {
             String text = line.replaceFirst("PrintToPlayer:", "");
             player.sendMessage(parseColor(text));
         } else if (targetPlayer != null) {
-            
-            
+
+
         }
     }
 
@@ -207,7 +215,7 @@ public class CommandParser {
     public String parseColor(String line) {
         return ChatColor.translateAlternateColorCodes('&', line);
     }
-    
+
     // check if JSon is valid
     // from https://stackoverflow.com/questions/10174898/how-to-check-whether-a-given-string-is-valid-json-in-java
     public boolean isJSONValid(String test) {
@@ -217,9 +225,9 @@ public class CommandParser {
             return false;
         }
         return true;
-    }      
+    }
 
-    
+
     @SuppressWarnings("unused")
     private void onExecuteConsoleCommandAndReturn(String line) {
         // split line into command and variables
@@ -258,5 +266,5 @@ public class CommandParser {
             }
             // TODO: Implement or remove.
         }
-    }    
+    }
 }

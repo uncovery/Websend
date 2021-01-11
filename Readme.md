@@ -41,7 +41,7 @@ This allows you to execute PHP scripts by typing in-game commands. Websend creat
 * Open the Websend plugin configuration file.
 * Set the "URL=" option to the url of your php file.
 * Start your Bukkit server.
-* Try command “/ws argument1 argument2”. Just /ws will return an "Empty argument" error 
+* Try command “/ws argument1 argument2”. Just /ws will return an "Empty argument" error
 
 ## Sending a command
 
@@ -92,7 +92,7 @@ The action needs to be one of the following types, capitalization is not relevan
 *   `Broadcast`: Broadcasts whatever the `command` is set to to all players currently playing on the server.
 *   `ExecutePlayerCommand`: Executes whatever the `command` is set as a player currently playing on your server. By using "targetPlayer", you can specify the player to set as command source, otherwise the command will be ran as the player that started the websend request. This allows you to 'force' a user to execute a command.
 *   `ExecuteConsoleCommand`: Executes hatever the `command` is set to as if it was entered directly on the server console.
-*   `toggleDebug`: Switches debug on or off, depending what the current status is. `command` is ignored, should ideally be '', targetPlayer needs to be `null`.
+*   `toggleDebug`: Switches debug on or off, by either just calling it with empty command (''), then it will just toggle the status or by determining the command with 'on' or 'off', targetPlayer needs to be `null`.
 *   `executeScript`: Runs a script. The script (specified by `command`) that has to be in the Websend scripts directory and has to be compiled and loaded before this is run.
 *   `setResponseURL`: Changes the responseURL as set in the websend config file to whatever is set in `command`. `targetPlayer` needs to be `null`.
 
