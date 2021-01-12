@@ -80,6 +80,8 @@ function websend_command($action, $command = '', $targetPlayer = null) {
 ?>
 ````
 
+Please see the included minecraft.php for an example how this works.
+
 You can execute this function several times to do several things in sequence. Please note that minecraft will do commands with the same action in sequence,
 but there is a risk that commands such as ExecuteConsoleCommand take longer than PrintToConsole. So if you execeute a PrintToConsole after a ConsoleCommand, the PrintToConsole might still happen first.
 
@@ -92,7 +94,7 @@ The action needs to be one of the following types, capitalization is not relevan
 *   `Broadcast`: Broadcasts whatever the `command` is set to to all players currently playing on the server.
 *   `ExecutePlayerCommand`: Executes whatever the `command` is set as a player currently playing on your server. By using "targetPlayer", you can specify the player to set as command source, otherwise the command will be ran as the player that started the websend request. This allows you to 'force' a user to execute a command.
 *   `ExecuteConsoleCommand`: Executes hatever the `command` is set to as if it was entered directly on the server console.
-*   `toggleDebug`: Switches debug on or off, by either just calling it with empty command (''), then it will just toggle the status or by determining the command with 'on' or 'off', targetPlayer needs to be `null`. ATTENTION: If you have basic issues to get websend running, you need to set debug on in the plugin config, not here.
+*   `toggleDebug`: Switches debug on or off. If you call this action with empty command (''), it will just toggle the status. Alternatively set a status with the command 'on' or 'off'. targetPlayer needs to be `null`. ATTENTION: If you have basic issues to get websend running, you need to set debug on in the plugin config, not here as this switch will only become active after a successful connection with websend is established.
 *   `executeScript`: Runs a script. The script (specified by `command`) that has to be in the Websend scripts directory and has to be compiled and loaded before this is run.
 *   `setResponseURL`: Changes the responseURL as set in the websend config file to whatever is set in `command`. `targetPlayer` needs to be `null`.
 
