@@ -1,7 +1,7 @@
 <?php
 /*
  *  This is the central websend class that does the actual communication with
- *  Websend
+ *  Websend when it's started by PHP
  *
  *  Writted by Waterflames for the Websend project
  *  Adjusted by Uncovery for the latest spigot versions

@@ -1,13 +1,17 @@
 <?php
-    require_once 'Websend.php';
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-    $ws = new Websend("123.456.789.123");
-    $ws->password = "websendpassword";
+require_once 'Websend.php';
 
-    if($ws->connect()){
-        $ws->doCommandAsConsole("time set 6000");
-        echo "Time set.";
-    }else{
-        echo "Failed to connect.";
-    }
-    $ws->disconnect();
+$ws = new Websend("123.456.789.123");
+$ws->password = "websendpassword";
+
+if($ws->connect()){
+    $ws->doCommandAsConsole("time set 6000");
+    echo "Time set.";
+}else{
+    echo "Failed to connect.";
+}
+$ws->disconnect();

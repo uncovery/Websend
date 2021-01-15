@@ -1,5 +1,6 @@
 # Websend
 
+Websend is a spigot/paper plugin for minecraft servers.
 Websend enables PHP developers to access minecraft commands from a web-based script.
 It allows in-game commands to execute PHP scripts and in return also execute actions in-game through PHP scripts.
 
@@ -100,6 +101,7 @@ The action needs to be one of the following types, capitalization is not relevan
 
 # PHP to Spigot
 You can initiate a command to the server via a PHP script as well. For this, you need the `Websend.php` file from the plugin directory. It contains a class that connects to the minecraft server and manages the communication. Further, you need a PHP script that loads the class and executes a command. There is an example `ExternalTimeSet.php` in the plugin directory.
+The default port is 4445. Please make sure that your minecraft server is able to listen to that port.
 
 The base process is as follows:
 ````php

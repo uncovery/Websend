@@ -1,4 +1,8 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 global $CONFIG;
 
 $CONFIG['checkpass'] = "PutYourPasswordHere";
@@ -20,12 +24,12 @@ function websend_connect() {
 
     $checkpass = $CONFIG['checkpass'];
     $hashAlgorithm = $CONFIG['hashAlgorithm'];
-    
+
     $receivedHash = filter_input(INPUT_POST, 'authKey', FILTER_UNSAFE_RAW);
     $is_compressed = filteR_input(INPUT_POST, 'isCompressed', FILTER_SANITIZE_STRING);
 
     $args = $_POST["args"]; //each argument is stored in an array called "args"
-    
+
     if ($args[0] == "") {
         websend_fatal_error("Empty argument! Don't just call ws/websend, add more arguments.");
     }
@@ -66,7 +70,7 @@ function websend_fatal_error($msg) {
 
 /**
  * Sending replies to the minecraft server when a command has been executed with ws....
- * 
+ *
  * @param type $action
  * @param type $cmd
  * @param type $player

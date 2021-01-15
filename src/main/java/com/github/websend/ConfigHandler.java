@@ -13,7 +13,7 @@ public class ConfigHandler {
     public Settings loadSettings() throws FileNotFoundException, IOException {
         // Prepare new settings map
         Settings settings = new Settings();
-        
+
         // Open file
         BufferedReader reader = openFile();
 
@@ -83,11 +83,14 @@ public class ConfigHandler {
                 // Clean and store value
                 String value = line.replaceFirst("RESPONSEURL=", "");
                 settings.setResponseURL(value);
+                Main.logDebugInfo(Level.INFO, "Config read: Response URL is :" + value);
             } else if (line.startsWith("PASS=")) {
                 String value = line.replaceFirst("PASS=", "");
                 settings.setPassword(value);
+                Main.logDebugInfo(Level.INFO, "Config read: Password is set!");
             } else if (line.startsWith("ALTPORT=")) {
                 String value = line.replaceFirst("ALTPORT=", "");
+                Main.logDebugInfo(Level.INFO, "Config read: AltPort is set to " + value);
                 int convertedValue = 0;
                 try {
                     convertedValue = Integer.parseInt(value.trim());
@@ -103,26 +106,32 @@ public class ConfigHandler {
                 String value = line.replaceFirst("DEBUG_WEBSEND=", "");
                 if (value.toLowerCase().trim().contains("true")) {
                     settings.setDebugMode(true);
+                    Main.logDebugInfo(Level.INFO, "Config read: DEBUG Mode is ON");
                 } else {
                     settings.setDebugMode(false);
+                    Main.logDebugInfo(Level.INFO, "Config read: DEBUG Mode is OFF");
                 }
             } else if (line.startsWith("WEBLISTENER_ACTIVE=")) {
                 String value = line.replaceFirst("WEBLISTENER_ACTIVE=", "");
                 if (value.toLowerCase().trim().contains("true")) {
                     settings.setServerActive(true);
+                    Main.logDebugInfo(Level.INFO, "Config read: Web Listener is ON");
                 } else {
                     settings.setServerActive(false);
+                    Main.logDebugInfo(Level.INFO, "Config read: Web Listener is OFF");
                 }
             } else if (line.startsWith("URL=")) {
                 String value = line.replaceFirst("URL=", "");
                 try {
                     settings.setURL(new URL(value));
+                    Main.logDebugInfo(Level.INFO, "Config read: URL is set to " + value);
                 } catch (MalformedURLException ex) {
                     Main.getMainLogger().log(Level.SEVERE, "Invalid URL");
                 }
             } else if (line.startsWith("SALT=")) {
                 String value = line.replaceFirst("SALT=", "");
                 settings.setSalt(value);
+                Main.logDebugInfo(Level.INFO, "Config read: Salt is set to " + value);
             } else if (line.startsWith("HASH_ALGORITHM=")) {
                 String value = line.replaceFirst("HASH_ALGORITHM=", "");
                 try {
@@ -132,9 +141,11 @@ public class ConfigHandler {
                 } catch (NoSuchAlgorithmException ex) {
                     Main.getMainLogger().info("Hashing algorithm '" + value + "' is not available on this machine.");
                 }
+                Main.logDebugInfo(Level.INFO, "Config read: Hash algorithm is set to " + value);
             } else if (line.startsWith("GZIP_REQUESTS=")) {
                 String value = line.replaceFirst("GZIP_REQUESTS=", "");
                 settings.setGzipRequests(Boolean.parseBoolean(value));
+                Main.logDebugInfo(Level.INFO, "Config read: GZIP is set to " + value);
             } else if (line.startsWith("SERVER_BIND_IP=")) {
                 String value = line.replaceFirst("SERVER_BIND_IP=", "");
                 try {
@@ -147,6 +158,7 @@ public class ConfigHandler {
                 } catch (Exception ex) {
                     Main.getMainLogger().log(Level.WARNING, "Error while parsing bind ip address.");
                 }
+                Main.logDebugInfo(Level.INFO, "Config read: Server bind IP is set to " + value);
             } else if (line.startsWith("WRAP_COMMAND_EXECUTOR=")) {
                 String value = line.replaceFirst("WRAP_COMMAND_EXECUTOR=", "");
                 if (value.toLowerCase().trim().contains("true")) {
@@ -158,9 +170,12 @@ public class ConfigHandler {
                 String value = line.replaceFirst("USE_SSL=", "");
                 if (value.toLowerCase().trim().contains("true")) {
                     settings.setSSLEnabled(true);
+                    Main.logDebugInfo(Level.INFO, "Config read: SSL is set to ON");
                 } else {
                     settings.setSSLEnabled(false);
+                    Main.logDebugInfo(Level.INFO, "Config read: SS: is set to OFF");
                 }
+
             } else if (line.startsWith("SSL_PASS=")) {
                 String value = line.replaceFirst("SSL_PASS=", "");
                 settings.setSslPassword(value);
