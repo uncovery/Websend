@@ -1,5 +1,9 @@
 This is a changelog from v.5.0 on. Previous changes cover updates to make Websend compatible with recent versions of minecraft and additional information passed in JSON.
 
+Version 5.2:
+
+- added more debug info for the server
+
 Version 5.1:
 
 - improved debug info regarding arguments (not) passed.
