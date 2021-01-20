@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.websend</groupId>
     <artifactId>Websend</artifactId>
-    <version>5.2</version>
+    <version>5.3</version>
     <packaging>jar</packaging>
     <repositories>
         <repository>
@@ -43,7 +43,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.16.4-R0.1-SNAPSHOT</version>
+            <version>1.16.5-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -58,7 +58,7 @@
             <artifactId>spigot</artifactId>
             <version>1.16.4-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/spigot-1.16.4-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${basedir}/lib/spigot-1.16.5-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
     </dependencies>
     <properties>
