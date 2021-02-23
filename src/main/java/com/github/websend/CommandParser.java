@@ -29,8 +29,11 @@ public class CommandParser {
             JSONObject JSONobj = new JSONObject(line);
 
             String targetPlayer;
+            String targetPlayer_raw;
             if (!JSONobj.isNull("targetPlayer")) {
-                targetPlayer = JSONobj.getString("targetPlayer").trim();
+                // JSONobj.get("targetPlayer").
+                targetPlayer_raw = JSONobj.getString("targetPlayer");
+                targetPlayer = targetPlayer_raw.trim();
             } else {
                 targetPlayer = null;
             }

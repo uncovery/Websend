@@ -3,6 +3,7 @@ package com.github.websend;
 import com.github.websend.spigot.SpigotJSONSerializer;
 import com.google.gson.Gson;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.minecraft.server.v1_16_R3.MojangsonParser;
@@ -82,7 +83,6 @@ public abstract class JSONSerializer {
                         // method to get nbt json from the legacy minecraft code
                         net.minecraft.server.v1_16_R3.ItemStack CBStack = CraftItemStack.asNMSCopy(itemStack);
                         NBTTagCompound itemTag = CBStack.getTag();
-
                         Gson gson = new Gson();
                         String json = gson.toJson(itemTag);
                         item.put("nbt_json", json);
@@ -100,9 +100,15 @@ public abstract class JSONSerializer {
 
                         // method to get nbt from the spigo API instead of the legacy minecraft code
                         // the issue here is that enchantments have the wrong name, e.g. "SWEEPING_EDGE" instead of "minecraft:sweeping"
-                        Gson gson2 = new Gson();
-                        String json2 = gson2.toJson(itemStack.getItemMeta().serialize());
-                        item.put("nbt_json_api", json2);
+
+                        //Main.logDebugInfo("embedding item nbt_json_api for inventory slot " + i);
+                        //Gson gson2 = new Gson();
+
+                        //Map<String, Object> testing;
+                        //testing = itemStack.getItemMeta().serialize();
+
+                        //String json2 = gson2.toJson(testing);
+                        //item.put("nbt_json_api", json2);
                     }
 
                     inventory.put(item);
