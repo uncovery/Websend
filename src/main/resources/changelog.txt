@@ -1,5 +1,13 @@
 This is a changelog from v.5.0 on. Previous changes cover updates to make Websend compatible with recent versions of minecraft and additional information passed in JSON.
 
+Version 5.4:
+
+ - fixed issues with crossbows crashing command execution
+
+Version 5.3:
+
+ - Updated to 1.16.5
+
 Version 5.2:
 
 - added more debug info for the server
