@@ -76,6 +76,9 @@ function websend_fatal_error($msg) {
  * @param type $player
  */
 function websend_command($action, $cmd = '', $target_player = null) {
+    // this is the mandatory structure of the data passed to Websend.
+    // changing this here will break the system.
+
     $websend_array = array(
         'action' => $action,
         'targetPlayer' => $target_player,

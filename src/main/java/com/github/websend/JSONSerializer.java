@@ -98,17 +98,19 @@ public abstract class JSONSerializer {
                             Logger.getLogger(JSONSerializer.class.getName()).log(Level.SEVERE, null, ex);
                         }
 
-                        // method to get nbt from the spigo API instead of the legacy minecraft code
+                        // method to get nbt from the spigot API instead of the legacy minecraft code
                         // the issue here is that enchantments have the wrong name, e.g. "SWEEPING_EDGE" instead of "minecraft:sweeping"
 
-                        //Main.logDebugInfo("embedding item nbt_json_api for inventory slot " + i);
-                        //Gson gson2 = new Gson();
+                        Main.logDebugInfo("embedding item nbt_json_api for inventory slot " + i);
+                        Map<String, Object> serialMeta;
 
-                        //Map<String, Object> testing;
-                        //testing = itemStack.getItemMeta().serialize();
-
-                        //String json2 = gson2.toJson(testing);
-                        //item.put("nbt_json_api", json2);
+                        serialMeta = itemStack.getItemMeta().serialize();
+                        String json2 = serialMeta.toString();
+                        // converting to JSON does not work. this would cause a crash, so we rather let this happen on the PHP side.
+                        // main issue here is how crossbows once they were charged behave.
+                        //
+                        // String json2 = gson2.toJson(testing);
+                        item.put("nbt_json_api_string", json2);
                     }
 
                     inventory.put(item);

@@ -29,23 +29,22 @@ public class CommandParser {
             JSONObject JSONobj = new JSONObject(line);
 
             String targetPlayer;
-            String targetPlayer_raw;
-            if (!JSONobj.isNull("targetPlayer")) {
-                // JSONobj.get("targetPlayer").
-                targetPlayer_raw = JSONobj.getString("targetPlayer");
-                targetPlayer = targetPlayer_raw.trim();
+            // we put a couple of safeguards to make sure we have a valid player, otherwise the getString will fail
+            // we will check if we have a valid player further down when it's actually used.
+            if (!JSONobj.isNull("targetPlayer") && !JSONobj.getBoolean("targetPlayer")) {
+                targetPlayer = JSONobj.getString("targetPlayer").trim();
             } else {
                 targetPlayer = null;
             }
 
             if (JSONobj.isNull("command")) {
-                 Main.getMainLogger().info("Websend ERROR: The 'command' component of the JSON is missing: " + line);
-                 return;
+                Main.getMainLogger().log(Level.SEVERE, "Websend: The 'command' component of the JSON is missing: " + line);
+                return;
             }
 
             if (JSONobj.isNull("action")) {
-                 Main.getMainLogger().info("Websend ERROR: The 'action' component of the JSON is missing!" + line);
-                 return;
+                Main.getMainLogger().log(Level.SEVERE, "Websend ERROR: The 'action' component of the JSON is missing!" + line);
+                return;
             }
 
             Main.logDebugInfo("Command parsing: Execute JSON commnad " + line);
@@ -193,7 +192,7 @@ public class CommandParser {
             String message = line;
 
             if ("console".equals(playerName)) {
-                Main.logDebugInfo("Websend: Player 'console'? Using PrintToConsole instead.");
+                Main.logDebugInfo("Websend: sending to Player 'console'? Using PrintToConsole instead.");
             } else if (targetPlayer == null) {
                 Main.getMainLogger().log(Level.WARNING, "Websend: No player '" + playerName + "' found on PrintToPlayer.");
             } else if (!player.isOnline()) {
@@ -204,7 +203,7 @@ public class CommandParser {
             String text = line.replaceFirst("PrintToPlayer:", "");
             player.sendMessage(parseColor(text));
         } else if (targetPlayer != null) {
-
+            // this would be if a command is coming from external targeting a player
 
         }
     }
