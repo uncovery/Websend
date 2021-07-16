@@ -3,13 +3,10 @@ package com.github.websend;
 import com.github.websend.spigot.SpigotJSONSerializer;
 import com.google.gson.Gson;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import net.minecraft.server.v1_16_R3.MojangsonParser;
-import net.minecraft.server.v1_16_R3.NBTTagCompound;
+import net.minecraft.nbt.MojangsonParser;
+import net.minecraft.nbt.NBTTagCompound;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -17,6 +14,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class JSONSerializer {
     private static JSONSerializer instance = null;
@@ -81,7 +81,7 @@ public abstract class JSONSerializer {
 
                     if (itemStack.hasItemMeta()) {
                         // method to get nbt json from the legacy minecraft code
-                        net.minecraft.server.v1_16_R3.ItemStack CBStack = CraftItemStack.asNMSCopy(itemStack);
+                        net.minecraft.world.item.ItemStack CBStack = CraftItemStack.asNMSCopy(itemStack);
                         NBTTagCompound itemTag = CBStack.getTag();
                         Gson gson = new Gson();
                         String json = gson.toJson(itemTag);

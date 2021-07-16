@@ -7,7 +7,8 @@ import org.bukkit.Server;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.json.*;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class CommandParser {
 

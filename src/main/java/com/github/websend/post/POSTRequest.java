@@ -25,7 +25,6 @@ import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class POSTRequest {
@@ -46,12 +45,8 @@ public class POSTRequest {
         content.add(new BasicNameValuePair("isResponse", Boolean.toString(isResponse)));
         content.add(new BasicNameValuePair("authKey", Util.hash(Main.getSettings().getPassword())));
         content.add(new BasicNameValuePair("isCompressed", Boolean.toString(Main.getSettings().areRequestsGZipped())));
+        jsonData = getJSONDataString(player, null);
 
-        try {
-            jsonData = getJSONDataString(player, null);
-        } catch (JSONException ex) {
-            Logger.getLogger(POSTRequest.class.getName()).log(Level.SEVERE, "Failed to generate JSON data.", ex);
-        }
         for (int i = 0; i < args.length; i++) {
             content.add(new BasicNameValuePair("args[" + i + "]", args[i]));
         }
@@ -70,11 +65,7 @@ public class POSTRequest {
         content.add(new BasicNameValuePair("authKey", Util.hash(Main.getSettings().getPassword())));
         content.add(new BasicNameValuePair("isCompressed", Boolean.toString(Main.getSettings().areRequestsGZipped())));
 
-        try {
-            jsonData = getJSONDataString(null, playerNameArg);
-        } catch (JSONException ex) {
-            Logger.getLogger(POSTRequest.class.getName()).log(Level.SEVERE, "Failed to generate JSON data.", ex);
-        }
+        jsonData = getJSONDataString(null, playerNameArg);
         for (int i = 0; i < args.length; i++) {
             content.add(new BasicNameValuePair("args[" + i + "]", args[i]));
         }
@@ -152,12 +143,12 @@ public class POSTRequest {
         return httpClient.execute(httpPost);
     }
 
-    private String getJSONDataString(Player ply, String playerNameArg) throws JSONException {
+    private String getJSONDataString(Player ply, String playerNameArg) {
         Server server = Main.getBukkitServer();
         JSONObject data = new JSONObject();
         {
             if (ply != null) {
-                JSONObject jsonPlayer = JSONSerializer.getInstance().serializePlayer(ply, true);
+                org.json.JSONObject jsonPlayer = JSONSerializer.getInstance().serializePlayer(ply, true);
                 data.put("Invoker", jsonPlayer);
             } else if (playerNameArg != null) {
                 JSONObject jsonPlayer = new JSONObject();
