@@ -24,6 +24,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityCategory;
 import org.bukkit.entity.Pose;
@@ -68,7 +69,7 @@ public class PacketParser {
                 PluginCommand pluginCommand = Main.getBukkitServer().getPluginCommand(command);
                 if (pluginCommand != null){
                     final Plugin targetPlugin = pluginCommand.getPlugin();
-                    
+
                     success = Main.getBukkitServer().getScheduler().callSyncMethod(Main.getInstance(), new CallableImpl(player, targetPlugin, command)).get();
                 } else {
                     Main.getMainLogger().log(Level.WARNING, "Cannot execute command '" + command + "': Command does not exist.");
@@ -426,6 +427,51 @@ public class PacketParser {
 
             @Override
             public void setStarvationRate(int arg0) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public boolean breakBlock(Block block) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public ItemStack getItemInUse() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public boolean isClimbing() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void setVisualFire(boolean bln) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public boolean isVisualFire() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public int getFreezeTicks() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public int getMaxFreezeTicks() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void setFreezeTicks(int i) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public boolean isFrozen() {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
         }
