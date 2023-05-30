@@ -265,13 +265,6 @@ public abstract class WebsendPlayerCommandSender implements Player {
         baseObject.sendBlockChange(param0, param1, param2);
     }
 
-
-
-    @Override
-    public boolean sendChunkChange(org.bukkit.Location param0, int param1, int param2, int param3, byte[] param4) {
-        return baseObject.sendChunkChange(param0, param1, param2, param3, param4);
-    }
-
     @Override
     public void sendMap(org.bukkit.map.MapView param0) {
         baseObject.sendMap(param0);

@@ -5,6 +5,7 @@ import com.github.websend.CompressionToolkit;
 import com.github.websend.JSONSerializer;
 import com.github.websend.Main;
 import com.github.websend.Util;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,6 +26,7 @@ import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class POSTRequest {
@@ -143,12 +145,17 @@ public class POSTRequest {
         return httpClient.execute(httpPost);
     }
 
-    private String getJSONDataString(Player ply, String playerNameArg) {
+    private String getJSONDataString(Player ply, String playerNameArg) throws JSONException {
         Server server = Main.getBukkitServer();
         JSONObject data = new JSONObject();
         {
             if (ply != null) {
-                org.json.JSONObject jsonPlayer = JSONSerializer.getInstance().serializePlayer(ply, true);
+                org.json.JSONObject jsonPlayer = null;
+                try {
+                    jsonPlayer = JSONSerializer.getInstance().serializePlayer(ply, true);
+                } catch (CommandSyntaxException ex) {
+                    Logger.getLogger(POSTRequest.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 data.put("Invoker", jsonPlayer);
             } else if (playerNameArg != null) {
                 JSONObject jsonPlayer = new JSONObject();
@@ -191,7 +198,12 @@ public class POSTRequest {
                 {
                     for (Player cur : server.getOnlinePlayers()) {
                         boolean extendedData = Main.getSettings().isExtendedPlayerDataEnabled();
-                        JSONObject curPlayer = JSONSerializer.getInstance().serializePlayer(cur, extendedData);
+                        JSONObject curPlayer = null;
+                        try {
+                            curPlayer = JSONSerializer.getInstance().serializePlayer(cur, extendedData);
+                        } catch (CommandSyntaxException ex) {
+                            Logger.getLogger(POSTRequest.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                         onlinePlayers.put(curPlayer);
                     }
                 }

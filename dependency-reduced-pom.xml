@@ -25,15 +25,16 @@
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
-      <version>1.17-R0.1-SNAPSHOT</version>
-      <scope>provided</scope>
+      <version>1.19.4-R0.1-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${user.home}/.m2/repository/org\spigotmc/spigot-api/1.19.4-R0.1-SNAPSHOT/spigot-api-1.19.4-R0.1-SNAPSHOT.jar</systemPath>
     </dependency>
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot</artifactId>
-      <version>1.17-SNAPSHOT</version>
+      <version>1.19.4-SNAPSHOT</version>
       <scope>system</scope>
-      <systemPath>${user.home}/.m2/repository/org/spigotmc/spigot/1.17-R0.1-SNAPSHOT/spigot-1.17-R0.1-SNAPSHOT.jar</systemPath>
+      <systemPath>${user.home}/.m2/repository/org/spigotmc/spigot/1.19.4-R0.1-SNAPSHOT/spigot-1.19.4-R0.1-SNAPSHOT.jar</systemPath>
     </dependency>
       <dependency>
           <groupId>org.apache.httpcomponents</groupId>

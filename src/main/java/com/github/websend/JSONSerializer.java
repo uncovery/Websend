@@ -6,7 +6,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.nbt.MojangsonParser;
 import net.minecraft.nbt.NBTTagCompound;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -17,6 +16,7 @@ import org.json.JSONObject;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
 
 public abstract class JSONSerializer {
     private static JSONSerializer instance = null;
@@ -28,7 +28,7 @@ public abstract class JSONSerializer {
         return instance;
     }
 
-    public JSONObject serializePlayer(Player ply, boolean serializeAllData) throws JSONException {
+    public JSONObject serializePlayer(Player ply, boolean serializeAllData) throws JSONException, CommandSyntaxException {
         JSONObject player = new JSONObject();
         {
             player.put("Name", ply.getName());
@@ -68,21 +68,21 @@ public abstract class JSONSerializer {
         return location;
     }
 
-    public JSONArray serializeInventory(Inventory inv) throws JSONException {
+    public JSONArray serializeInventory(Inventory inv) throws JSONException, CommandSyntaxException {
         JSONArray inventory = new JSONArray(); {
             for (int i = 0; i < inv.getSize(); i++) {
                 ItemStack itemStack = inv.getItem(i);
                 if (itemStack != null) {
                     JSONObject item = new JSONObject();
                     item.put("Slot", i);
-
                     item.put("TypeName", itemStack.getType().name());
                     item.put("Amount", itemStack.getAmount());
 
                     if (itemStack.hasItemMeta()) {
                         // method to get nbt json from the legacy minecraft code
                         net.minecraft.world.item.ItemStack CBStack = CraftItemStack.asNMSCopy(itemStack);
-                        NBTTagCompound itemTag = CBStack.getTag();
+                        NBTTagCompound itemTag;
+                        itemTag = CBStack.u();
                         Gson gson = new Gson();
                         String json = gson.toJson(itemTag);
                         item.put("nbt_json", json);
@@ -90,14 +90,15 @@ public abstract class JSONSerializer {
                         // method to get nbt_raw without converting it to json
                         // this is the current default instead of using the JSON above
                         String tagString = itemTag.toString();
-
+    
                         try {
-                            String parsedString = MojangsonParser.parse(tagString).toString();
+                            String parsedString = MojangsonParser.a(tagString).toString();
+                            //String parsedString = MojangsonParser.parse(tagString).toString();
                             item.put("nbt_raw", parsedString);
                         } catch (CommandSyntaxException ex) {
                             Logger.getLogger(JSONSerializer.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-
+                        }                        
+                        
                         // method to get nbt from the spigot API instead of the legacy minecraft code
                         // the issue here is that enchantments have the wrong name, e.g. "SWEEPING_EDGE" instead of "minecraft:sweeping"
 
@@ -119,5 +120,4 @@ public abstract class JSONSerializer {
         }
         return inventory;
     }
-
 }
