@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 
+
 public class POSTHandlerThread extends Thread {
     private final POSTHandlerThreadPool parent;
     private final CloseableHttpClient httpClient;
@@ -27,7 +28,7 @@ public class POSTHandlerThread extends Thread {
                 busy = true;
                 try {
                     currentRequest.run(httpClient);
-                } catch (Exception ex) {
+                } catch (IOException ex) {
                     Main.getMainLogger().log(Level.SEVERE, "An exception occured while running a POST request.", ex);
                 }
                 parent.onThreadDone(this);

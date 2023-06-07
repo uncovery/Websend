@@ -15,13 +15,14 @@ public class POSTHandlerThreadPool {
     private int maxTotal;
 
     public POSTHandlerThreadPool(int poolStartSize) {
-        busyThreads = new ArrayList<POSTHandlerThread>();
-        availableThreadsQueue = new ConcurrentLinkedQueue<POSTHandlerThread>();
-        
+        busyThreads = new ArrayList<>();
+        availableThreadsQueue = new ConcurrentLinkedQueue<>();
+
         builder = HttpClientBuilder.create();
-        builder.setMaxConnPerRoute(poolStartSize);
-        builder.setMaxConnTotal(poolStartSize * 2);
+        //builder.setMaxConnPerRoute(poolStartSize); // old version
+        //builder.setMaxConnTotal(poolStartSize * 2);
         builder.setUserAgent("Websend/"+Main.getInstance().getDescription().getVersion());
+        
         maxPerRoute = poolStartSize;
         maxTotal = poolStartSize * 2;
         
@@ -41,9 +42,9 @@ public class POSTHandlerThreadPool {
         if (thread == null) {
             if (maxTotal < maxPerRoute + 1) {
                 maxTotal = (maxPerRoute + 1) * 2;
-                builder.setMaxConnTotal(maxTotal);
+                //builder.setMaxConnTotal(maxTotal); // old version
             }
-            builder.setMaxConnPerRoute(++maxPerRoute);
+            //builder.setMaxConnPerRoute(++maxPerRoute); // old version
             thread = new POSTHandlerThread(this, builder);
             thread.start();
         }

@@ -17,11 +17,11 @@ import java.util.logging.Logger;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.ByteArrayBody;
-import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.entity.ContentType;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -30,12 +30,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class POSTRequest {
-    private final ArrayList<BasicNameValuePair> content = new ArrayList<BasicNameValuePair>();
+            
+    private final ArrayList<BasicNameValuePair> content;
     private final URL url;
-    private String jsonData;
+    private final String jsonData;
     private Player player;
 
     public POSTRequest(URL url, String args[], Player player, boolean isResponse) {
+        this.content = new ArrayList<>();
         this.player = player;
 
         if (args.length == 0) {
@@ -56,6 +58,7 @@ public class POSTRequest {
     }
 
     public POSTRequest(URL url, String args[], String playerNameArg, boolean isResponse) {
+        this.content = new ArrayList<>();
 
         if (args.length == 0) {
             Main.getMainLogger().info("POSTRequest ERROR: You need to pass arguments with /ws and /websend!");
@@ -91,22 +94,6 @@ public class POSTRequest {
         } else if (responseCode >= 400) {
             message = "HTTP request failed. (" + reason + ")";
             Main.getMainLogger().log(Level.SEVERE, message);
-            if(Main.getSettings().isDebugMode()){
-                BufferedReader buffer = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-                StringBuilder page = new StringBuilder();
-                try {
-                    String cur = null;
-                    while((cur = buffer.readLine()) != null){
-                        page.append(cur).append('\n');
-                    }
-                    Main.getMainLogger().log(Level.SEVERE, "Server response: "+page.toString());
-                }
-                catch(IOException ex){}
-                finally{
-                    buffer.close();
-                }
-            }
-            return;
         } else if (responseCode >= 300) {
             message = "The server responded to the request with a redirection message. Assuming request OK. (" + reason + ")";
         } else if (responseCode < 200) {
