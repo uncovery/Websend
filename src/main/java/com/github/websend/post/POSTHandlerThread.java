@@ -4,9 +4,8 @@ import com.github.websend.Main;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 
 public class POSTHandlerThread extends Thread {
     private final POSTHandlerThreadPool parent;
@@ -29,7 +28,7 @@ public class POSTHandlerThread extends Thread {
                 try {
                     currentRequest.run(httpClient);
                 } catch (IOException ex) {
-                    Main.getMainLogger().log(Level.SEVERE, "An exception occured while running a POST request.", ex);
+                    Main.getMainLogger().log(Level.SEVERE, "An exception occurred while running a POST request.", ex);
                 }
                 parent.onThreadDone(this);
                 currentRequest = null;
@@ -45,7 +44,7 @@ public class POSTHandlerThread extends Thread {
         try {
             httpClient.close();
         } catch (IOException ex) {
-            Main.logDebugInfo(Level.WARNING, "An exception occured while closing the httpclient.", ex);
+            Main.logDebugInfo(Level.WARNING, "An exception occurred while closing the HttpClient.", ex);
         }
     }
 

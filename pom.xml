@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.websend</groupId>
     <artifactId>Websend</artifactId>
-    <version>5.6</version>
+    <version>5.7</version>
     <packaging>jar</packaging>
     <repositories>  
         <repository>
@@ -18,7 +18,7 @@
           <id>minecraft-libraries</id>
           <name>Minecraft Libraries</name>
           <url>https://libraries.minecraft.net</url>
-        </repository>	
+        </repository>
     </repositories>    
     <dependencies>
         <dependency>
@@ -31,7 +31,7 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20230227</version>
+            <version>20250107</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -43,17 +43,9 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.19.4-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${user.home}/.m2/repository/org\spigotmc/spigot-api/1.19.4-R0.1-SNAPSHOT/spigot-api-1.19.4-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.19.4-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${user.home}/.m2/repository/org/spigotmc/spigot/1.19.4-R0.1-SNAPSHOT/spigot-1.19.4-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
+            <version>1.21.4-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>      
         <dependency>
             <groupId>com.mojang</groupId>
             <artifactId>brigadier</artifactId>
@@ -65,14 +57,15 @@
             <version>2.10.1</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.5.9</version>
+            <groupId>net.forthecrown</groupId>
+            <artifactId>PaperNBT</artifactId>
+            <version>1.0.0</version>
+            <type>pom</type>
         </dependency>
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpmime</artifactId>
-            <version>4.5.9</version>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+            <version>5.4.1</version>
             <type>jar</type>
         </dependency>
     </dependencies>

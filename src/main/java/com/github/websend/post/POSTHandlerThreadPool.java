@@ -4,7 +4,7 @@ import com.github.websend.Main;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 
 public class POSTHandlerThreadPool {
 

@@ -14,14 +14,15 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.ByteArrayBody;
-import org.apache.http.entity.ContentType;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
+import org.apache.hc.client5.http.entity.mime.ByteArrayBody;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -30,8 +31,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class POSTRequest {
-            
-    private final ArrayList<BasicNameValuePair> content;
+
+    private final ArrayList<org.apache.hc.core5.http.NameValuePair> content;
     private final URL url;
     private final String jsonData;
     private Player player;
@@ -46,13 +47,13 @@ public class POSTRequest {
             Main.logDebugInfo("POSTRequest: Executing commands by player " + player.getDisplayName() + " with arguments '" + String.join("', '", args) + "'");
         }
 
-        content.add(new BasicNameValuePair("isResponse", Boolean.toString(isResponse)));
-        content.add(new BasicNameValuePair("authKey", Util.hash(Main.getSettings().getPassword())));
-        content.add(new BasicNameValuePair("isCompressed", Boolean.toString(Main.getSettings().areRequestsGZipped())));
+        content.add(new org.apache.hc.core5.http.message.BasicNameValuePair("isResponse", Boolean.toString(isResponse)));
+        content.add(new org.apache.hc.core5.http.message.BasicNameValuePair("authKey", Util.hash(Main.getSettings().getPassword())));
+        content.add(new org.apache.hc.core5.http.message.BasicNameValuePair("isCompressed", Boolean.toString(Main.getSettings().areRequestsGZipped())));
         jsonData = getJSONDataString(player, null);
 
         for (int i = 0; i < args.length; i++) {
-            content.add(new BasicNameValuePair("args[" + i + "]", args[i]));
+            content.add(new org.apache.hc.core5.http.message.BasicNameValuePair("args[" + i + "]", args[i]));
         }
         this.url = url;
     }
@@ -66,65 +67,66 @@ public class POSTRequest {
             Main.logDebugInfo("POSTRequest: Executing commands by player " + playerNameArg + " with arguments '" + String.join("', '", args) + "'");
         }
 
-        content.add(new BasicNameValuePair("isResponse", Boolean.toString(isResponse)));
-        content.add(new BasicNameValuePair("authKey", Util.hash(Main.getSettings().getPassword())));
-        content.add(new BasicNameValuePair("isCompressed", Boolean.toString(Main.getSettings().areRequestsGZipped())));
+        content.add(new org.apache.hc.core5.http.message.BasicNameValuePair("isResponse", Boolean.toString(isResponse)));
+        content.add(new org.apache.hc.core5.http.message.BasicNameValuePair("authKey", Util.hash(Main.getSettings().getPassword())));
+        content.add(new org.apache.hc.core5.http.message.BasicNameValuePair("isCompressed", Boolean.toString(Main.getSettings().areRequestsGZipped())));
 
         jsonData = getJSONDataString(null, playerNameArg);
         for (int i = 0; i < args.length; i++) {
-            content.add(new BasicNameValuePair("args[" + i + "]", args[i]));
+            content.add(new org.apache.hc.core5.http.message.BasicNameValuePair("args[" + i + "]", args[i]));
         }
         this.url = url;
     }
 
-    public void run(HttpClient httpClient) throws IOException {
-        HttpResponse response = doRequest(httpClient);
+    public void run(CloseableHttpClient httpClient) throws IOException {
+        try (CloseableHttpResponse response = doRequest(httpClient)) {
+            int responseCode = response.getCode();
+            String reason = response.getReasonPhrase();
 
-        int responseCode = response.getStatusLine().getStatusCode();
-        String reason = response.getStatusLine().getReasonPhrase();
+            String message = "";
+            Level logLevel = Level.WARNING;
 
-        String message = "";
-        Level logLevel = Level.WARNING;
-
-        if (responseCode >= 200 && responseCode < 300) {
-            if (Main.getSettings().isDebugMode()) {
-                message = "The server responded to the request with a 2xx code. Assuming request OK. (" + reason + ")";
-                logLevel = Level.INFO;
+            if (responseCode >= 200 && responseCode < 300) {
+                if (Main.getSettings().isDebugMode()) {
+                    message = "The server responded to the request with a 2xx code. Assuming request OK. (" + reason + ")";
+                    logLevel = Level.INFO;
+                }
+            } else if (responseCode >= 400) {
+                message = "HTTP request failed. (" + reason + ")";
+                Main.getMainLogger().log(Level.SEVERE, message);
+            } else if (responseCode >= 300) {
+                message = "The server responded to the request with a redirection message. Assuming request OK. (" + reason + ")";
+            } else if (responseCode < 200) {
+                message = "The server responded to the request with a continue or protocol switching message. Assuming request OK. (" + reason + ")";
+            } else {
+                message = "The server responded to the request with an unknown response code (" + responseCode + "). Assuming request OK. (" + reason + ")";
             }
-        } else if (responseCode >= 400) {
-            message = "HTTP request failed. (" + reason + ")";
-            Main.getMainLogger().log(Level.SEVERE, message);
-        } else if (responseCode >= 300) {
-            message = "The server responded to the request with a redirection message. Assuming request OK. (" + reason + ")";
-        } else if (responseCode < 200) {
-            message = "The server responded to the request with a continue or protocol switching message. Assuming request OK. (" + reason + ")";
-        } else {
-            message = "The server responded to the request with an unknown response code (" + responseCode + "). Assuming request OK. (" + reason + ")";
-        }
 
-        Main.logDebugInfo(logLevel, message);
+            Main.logDebugInfo(logLevel, message);
 
-        CommandParser parser = new CommandParser();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-        String cur;
-        while ((cur = reader.readLine()) != null) {
-            parser.parse(cur, player);
+            CommandParser parser = new CommandParser();
+            HttpEntity entity = response.getEntity();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent()));
+            String cur;
+            while ((cur = reader.readLine()) != null) {
+                parser.parse(cur, player);
+            }
+            reader.close();
+            EntityUtils.consume(entity);
         }
-        reader.close();
     }
 
-    private HttpResponse doRequest(HttpClient httpClient) throws IOException {
+    private CloseableHttpResponse doRequest(CloseableHttpClient httpClient) throws IOException {
         HttpPost httpPost = new HttpPost(url.toString());
         httpPost.setHeader("enctype", "multipart/form-data");
 
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         builder.setCharset(Charset.forName("UTF-8"));
-        builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-        for (BasicNameValuePair cur : content) {
+        for (org.apache.hc.core5.http.NameValuePair cur : content) {
             builder.addTextBody(cur.getName(), cur.getValue());
         }
         if (Main.getSettings().areRequestsGZipped()) {
-            builder.addPart("jsonData", new ByteArrayBody(CompressionToolkit.gzipString(jsonData), "jsonData"));
+            builder.addPart("jsonData", new ByteArrayBody(CompressionToolkit.gzipString(jsonData), ContentType.DEFAULT_BINARY, "jsonData"));
         } else {
             builder.addTextBody("jsonData", jsonData, ContentType.APPLICATION_JSON);
         }
