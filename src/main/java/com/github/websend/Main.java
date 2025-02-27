@@ -5,6 +5,7 @@ import com.github.websend.post.POSTRequest;
 import com.github.websend.script.ScriptManager;
 import com.github.websend.server.CommunicationServer;
 import com.github.websend.server.NonSecureCommunicationServer;
+import com.github.websend.server.PacketParser;
 import com.github.websend.server.SecureCommunicationServer;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,6 +14,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
@@ -203,6 +205,13 @@ public class Main extends JavaPlugin {
         }
         return false;
     }
+    
+    public void dispatchCommandAsync(Player player, String command, PacketParser.CommandCallback callback) {
+        Bukkit.getScheduler().runTask(Main.getInstance(), () -> {
+            boolean result = Main.getBukkitServer().dispatchCommand(player, command);
+            callback.onCommandResult(result); // Pass the result to the callback
+        });
+    }   
 
     public static Server getBukkitServer() {
         return bukkitServer;

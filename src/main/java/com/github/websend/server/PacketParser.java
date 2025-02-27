@@ -44,6 +44,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.block.TileState;
 import org.bukkit.block.sign.Side;
+import org.bukkit.command.CommandException;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Entity;
@@ -79,6 +80,10 @@ public class PacketParser {
         return success;
     }
 
+    public interface CommandCallback {
+        void onCommandResult(boolean success);
+    } 
+    
     public static void parseDoCommandAsPlayer(DataInputStream in, DataOutputStream out) throws IOException {
         final String command = readString(in);
         String playerStr = readString(in);
@@ -93,6 +98,7 @@ public class PacketParser {
         }
 
         boolean success;
+        Main.getMainLogger().log(Level.INFO, "Trying to send command");
         try {
             if (Main.getSettings().areCommandExecutorsWrapped()) {
                 PluginCommand pluginCommand = Main.getBukkitServer().getPluginCommand(command);
@@ -105,10 +111,11 @@ public class PacketParser {
                     success = false;
                 }
             } else {
-                success = Main.getBukkitServer().dispatchCommand(player, command);
+                // success = Main.getBukkitServer().dispatchCommand(player, command);
+                success = Main.getBukkitServer().getScheduler().callSyncMethod(Main.getInstance(), new CallableImpl_player(player, command)).get();
             }
-        } catch (Exception ex) {
-            Main.logDebugInfo(Level.WARNING, "Websend caught an exception while running command '" + command + "'", ex);
+        } catch (InterruptedException | ExecutionException | CommandException ex) {
+            Main.logDebugInfo(Level.WARNING, "parseDoCommandAsPlayer: Websend caught an exception while running command '" + command + "'", ex);
             success = false;
         }
 
@@ -127,34 +134,18 @@ public class PacketParser {
             //config check?
             if (Main.getSettings().areCommandExecutorsWrapped()) {
                 PluginCommand pluginCommand = Main.getBukkitServer().getPluginCommand(command);
-                if(pluginCommand != null){
+                if (pluginCommand != null){
                     final Plugin targetPlugin = pluginCommand.getPlugin();
-                    success = Main.getBukkitServer().getScheduler().callSyncMethod(Main.getInstance(), new Callable<Boolean>() {
-                        @Override
-                        public Boolean call() {
-                            return Bukkit.dispatchCommand(
-                                new WebsendConsoleCommandSender(
-                                    Bukkit.getConsoleSender(),
-                                    targetPlugin
-                                ),
-                                command
-                            );
-                        }
-                    }).get();
-                }else{
+                    success = Main.getBukkitServer().getScheduler().callSyncMethod(Main.getInstance(), new CallableImpl1(targetPlugin, command)).get();
+                } else {
                     Main.getMainLogger().log(Level.WARNING, "Cannot execute command '"+command+"': Command does not exist.");
                     success = false;
                 }
             } else {
-                success = Main.getBukkitServer().getScheduler().callSyncMethod(Main.getInstance(), new Callable<Boolean>() {
-                    @Override
-                    public Boolean call() {
-                        return Bukkit.dispatchCommand(Main.getBukkitServer().getConsoleSender(), command);
-                    }
-                }).get();
+                success = Main.getBukkitServer().getScheduler().callSyncMethod(Main.getInstance(), new CallableImpl_console(command)).get();
             }
-        } catch (Exception ex) {
-            Main.logDebugInfo(Level.WARNING, "Websend caught an exception while running command '" + command + "'", ex);
+        } catch (InterruptedException | ExecutionException ex) {
+            Main.logDebugInfo(Level.WARNING, "parseDoCommandAsConsole: Websend caught an exception while running command '" + command + "'", ex);
             success = false;
         }
         if (success) {
@@ -1030,4 +1021,56 @@ public class PacketParser {
             }
         }
     }
+
+    private static class CallableImpl1 implements Callable<Boolean> {
+
+        private final Plugin targetPlugin;
+        private final String command;
+
+        public CallableImpl1(Plugin targetPlugin, String command) {
+            this.targetPlugin = targetPlugin;
+            this.command = command;
+        }
+
+        @Override
+        public Boolean call() {
+            return Bukkit.dispatchCommand(
+                    new WebsendConsoleCommandSender(
+                            Bukkit.getConsoleSender(),
+                            targetPlugin
+                    ),
+                    command
+            );
+        }
+    }
+
+    private static class CallableImpl_console implements Callable<Boolean> {
+
+        private final String command;
+
+        public CallableImpl_console(String command) {
+            this.command = command;
+        }
+
+        @Override
+        public Boolean call() {
+            return Bukkit.dispatchCommand(Main.getBukkitServer().getConsoleSender(), command); // 
+        }
+    }
+    
+    private static class CallableImpl_player implements Callable<Boolean> {
+
+        private final String command;
+        private final Player player;
+
+        public CallableImpl_player(Player player, String command) {
+            this.command = command;
+            this.player = player;
+        }
+
+        @Override
+        public Boolean call() {
+            return Bukkit.dispatchCommand(player, command); // Main.getBukkitServer().getConsoleSender()
+        }
+    }    
 }

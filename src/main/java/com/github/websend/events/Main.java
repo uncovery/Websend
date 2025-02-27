@@ -42,7 +42,8 @@ public class Main extends JavaPlugin{
         loadedAmount += loadEventHandler(VehicleEventsConfiguration.class, VehicleListener.class) ? 1 : 0;
         loadedAmount += loadEventHandler(WeatherEventsConfiguration.class, WeatherListener.class) ? 1 : 0;
         loadedAmount += loadEventHandler(WorldEventsConfiguration.class, WorldListener.class) ? 1 : 0;
-
+        loadedAmount += loadEventHandler(AdvancementEventsConfiguration.class, AdvancementsListener.class) ? 1 : 0;
+        
         return loadedAmount;
     }
 
