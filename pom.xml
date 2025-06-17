@@ -5,6 +5,11 @@
     <artifactId>Websend</artifactId>
     <version>5.8</version>
     <packaging>jar</packaging>
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
     <repositories>  
         <repository>
             <id>spigot-repo</id>
@@ -26,7 +31,6 @@
             <artifactId>commons-logging</artifactId>
             <version>1.2</version>
             <classifier>api</classifier>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.json</groupId>
@@ -65,16 +69,10 @@
         <dependency>
             <groupId>org.apache.httpcomponents.client5</groupId>
             <artifactId>httpclient5</artifactId>
-            <version>5.4.1</version>
+            <version>5.4.3</version>
             <type>jar</type>
         </dependency>
     </dependencies>
-    <properties>
-        <mainClass>project.Main.class</mainClass>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
     <build>
       <plugins>
         <plugin>
@@ -82,7 +80,7 @@
           <artifactId>maven-shade-plugin</artifactId>
           <version>3.2.1</version>
           <configuration>
-                <finalName>Websend</finalName>
+                <finalName>Websend-shaded-${version}</finalName>
                 <relocations>
                 </relocations>
           </configuration>
